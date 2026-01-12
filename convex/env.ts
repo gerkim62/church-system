@@ -1,4 +1,5 @@
 import { createEnv } from "@t3-oss/env-core";
+import { ConvexError } from "convex/values";
 import { z } from "zod";
 
 /**
@@ -28,6 +29,11 @@ export const env = createEnv({
    * Set these via: npx convex env set VARIABLE_NAME "value"
    */
   runtimeEnv: process.env,
+
+  onValidationError(issues) {
+    console.error("Environment variable validation error:", issues);
+    throw new ConvexError("Invalid environment variables");   
+  },
   
   /**
    * Treat empty strings as undefined for proper default value handling.

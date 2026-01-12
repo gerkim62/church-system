@@ -1,0 +1,39 @@
+Church System Features TODO
+
+Members Management:
+  ☐ All members list
+  ☐ Visitor tracking
+  ☐ Member milestones (e.g., baptism, confirmation, etc.)
+  
+Groups Management:
+  ☐ Groups with leaders array
+  ☐ Leader profiles with titles
+  ☐ Group giving functionality
+
+Financial Management:
+  ☐ Contribution list
+  ☐ Giving during events
+  ☐ Event giving configuration (specify whether event has givings)
+  ☐ Pledges for givings
+
+Events Management:
+  ☐ Event creation (group-specific or all members)
+  ☐ Recurring events
+  ☐ One-time events
+  ☐ Event notes functionality
+
+Attendance:
+  ☐ Attendance tracking system
+  ☐ Attendance reports
+
+Communication:
+  ☐ SMS to specific groups
+  ☐ SMS to all members
+
+Prayer Requests:
+  ☐ Prayer request submission
+  ☐ Visibility control (specify who can see requests)
+
+AI Features:
+  ☐ AI assistant for querying data
+  ☐ Question answering on everything

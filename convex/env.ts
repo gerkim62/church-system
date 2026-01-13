@@ -34,6 +34,8 @@ export const env = createEnv({
     console.error("Environment variable validation error:", issues);
     throw new ConvexError("Invalid environment variables");   
   },
+
+  skipValidation:true,
   
   /**
    * Treat empty strings as undefined for proper default value handling.

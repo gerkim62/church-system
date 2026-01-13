@@ -36,6 +36,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                   emailVerified: boolean;
                   image?: null | string;
                   name: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt: number;
                   userId?: null | string;
                 };
@@ -144,6 +146,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -430,6 +434,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -798,6 +804,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                   emailVerified?: boolean;
                   image?: null | string;
                   name?: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt?: number;
                   userId?: null | string;
                 };
@@ -811,6 +819,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -1152,6 +1162,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                   emailVerified?: boolean;
                   image?: null | string;
                   name?: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt?: number;
                   userId?: null | string;
                 };
@@ -1165,6 +1177,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"

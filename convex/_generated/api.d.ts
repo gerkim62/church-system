@@ -65,6 +65,8 @@ export declare const components: {
                   emailVerified: boolean;
                   image?: null | string;
                   name: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt: number;
                   userId?: null | string;
                 };
@@ -172,6 +174,8 @@ export declare const components: {
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -457,6 +461,8 @@ export declare const components: {
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -822,6 +828,8 @@ export declare const components: {
                   emailVerified?: boolean;
                   image?: null | string;
                   name?: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt?: number;
                   userId?: null | string;
                 };
@@ -835,6 +843,8 @@ export declare const components: {
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"
@@ -1175,6 +1185,8 @@ export declare const components: {
                   emailVerified?: boolean;
                   image?: null | string;
                   name?: string;
+                  phoneNumber?: null | string;
+                  phoneNumberVerified?: null | boolean;
                   updatedAt?: number;
                   userId?: null | string;
                 };
@@ -1188,6 +1200,8 @@ export declare const components: {
                     | "createdAt"
                     | "updatedAt"
                     | "userId"
+                    | "phoneNumber"
+                    | "phoneNumberVerified"
                     | "_id";
                   operator?:
                     | "lt"

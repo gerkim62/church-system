@@ -7,7 +7,7 @@ import { betterAuth, type BetterAuthOptions } from 'better-auth/minimal'
 import authConfig from './auth.config'
 import { env } from './env'
 import authSchema from './betterAuth/schema'
-import { organization } from 'better-auth/plugins'
+import { organization, phoneNumber } from 'better-auth/plugins'
 
 const siteUrl = env.SITE_URL
 
@@ -41,6 +41,16 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       convex({ authConfig }),
 
       organization({}),
+
+      phoneNumber({
+        sendOTP(data, ctx) {
+          // TODO: Implement your OTP sending logic here.
+          // For example, integrate with Twilio or another SMS service.
+          console.log(
+            `Sending OTP ${data.code} to phone number ${data.phoneNumber}`,
+          )
+        },
+      }),
     ],
   } satisfies BetterAuthOptions
 }

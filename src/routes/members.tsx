@@ -280,12 +280,14 @@ function MembersPage() {
                             </div>
                           </AccordionTrigger>
 
-                          <AccordionContent className="bg-muted/20 px-4 pb-4">
-                            <div className="pl-13 space-y-3 pt-2">
+                          <AccordionContent className="bg-muted/20 pb-4">
+                            <div className="space-y-3 px-4 pt-2">
                               {/* Email */}
-                              <div className="flex items-center gap-3">
-                                <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
-                                <div>
+                              <div className="flex items-start gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center">
+                                  <Mail className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div className="pt-1">
                                   <p className="text-xs text-muted-foreground">
                                     Email
                                   </p>
@@ -296,9 +298,11 @@ function MembersPage() {
                               </div>
 
                               {/* Phone */}
-                              <div className="flex items-center gap-3">
-                                <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
-                                <div>
+                              <div className="flex items-start gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center">
+                                  <Phone className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div className="pt-1">
                                   <p className="text-xs text-muted-foreground">
                                     Phone
                                   </p>
@@ -309,9 +313,11 @@ function MembersPage() {
                               </div>
 
                               {/* Member Since */}
-                              <div className="flex items-center gap-3">
-                                <Calendar className="h-4 w-4 text-muted-foreground shrink-0" />
-                                <div>
+                              <div className="flex items-start gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center">
+                                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                                </div>
+                                <div className="pt-1">
                                   <p className="text-xs text-muted-foreground">
                                     Member Since
                                   </p>
@@ -326,10 +332,12 @@ function MembersPage() {
                                 onClick={() =>
                                   handleMilestoneClick(member.id, member.name)
                                 }
-                                className="flex items-center gap-3 w-full p-3 rounded-lg bg-background/60 hover:bg-background transition-colors mt-2"
+                                className="flex items-center gap-3 w-full rounded-lg bg-background/60 hover:bg-background transition-colors"
                               >
-                                <Award className="h-4 w-4 text-amber-500 shrink-0" />
-                                <div className="flex-1 text-left">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center">
+                                  <Award className="h-4 w-4 text-amber-500" />
+                                </div>
+                                <div className="flex-1 text-left py-2">
                                   <p className="text-xs text-muted-foreground">
                                     Milestones
                                   </p>
@@ -337,7 +345,7 @@ function MembersPage() {
                                     {member.milestonesCount} achieved
                                   </p>
                                 </div>
-                                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                <ChevronRight className="h-4 w-4 text-muted-foreground mr-3" />
                               </button>
                             </div>
                           </AccordionContent>

@@ -48,6 +48,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import z from 'zod'
+import { MemberMilestonesModal } from '@/features/members/components/member-milestones-modal'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -278,14 +279,14 @@ function MembersPage() {
                                 </p>
                               </div>
 
-                              {/* Milestones badge */}
+                              {/* Milestones badge - Hidden on mobile, shown only in badge on desktop */}
                               <Badge
                                 variant={
                                   member.milestonesCount > 0
                                     ? 'default'
                                     : 'secondary'
                                 }
-                                className={`shrink-0 gap-1 mr-2 ${
+                                className={`shrink-0 gap-1 mr-2 hidden ${
                                   member.milestonesCount > 0
                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500'
                                     : ''
@@ -345,25 +346,29 @@ function MembersPage() {
                               </div>
 
                               {/* Milestones Button */}
-                              <button
-                                onClick={() =>
-                                  handleMilestoneClick(member.id, member.name)
-                                }
-                                className="flex items-center gap-3 w-full rounded-lg bg-background/60 hover:bg-background transition-colors"
+                              <MemberMilestonesModal
+                                memberId={member.id}
+                                memberName={member.name}
+                                hideOnDesktop
                               >
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center">
-                                  <Award className="h-4 w-4 text-amber-500" />
-                                </div>
-                                <div className="flex-1 text-left py-2">
-                                  <p className="text-xs text-muted-foreground">
-                                    Milestones
-                                  </p>
-                                  <p className="text-sm text-foreground">
-                                    {member.milestonesCount} achieved
-                                  </p>
-                                </div>
-                                <ChevronRight className="h-4 w-4 text-muted-foreground mr-3" />
-                              </button>
+                                <button 
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="flex items-center gap-3 w-full rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 transition-all p-3"
+                                >
+                                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 shadow-md">
+                                    <Award className="h-5 w-5 text-white" />
+                                  </div>
+                                  <div className="flex-1 text-left">
+                                    <p className="text-xs font-medium text-amber-600">
+                                      Milestones
+                                    </p>
+                                    <p className="text-sm font-semibold text-foreground">
+                                      {member.milestonesCount} achieved
+                                    </p>
+                                  </div>
+                                  <ChevronRight className="h-5 w-5 text-amber-500" />
+                                </button>
+                              </MemberMilestonesModal>
 
                               {/* Action Buttons */}
                               <div className="flex gap-2 pt-2 mt-2 border-t border-border/50">
@@ -465,34 +470,35 @@ function MembersPage() {
                             {/* Milestones */}
                             <TableCell className="text-center">
                               <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      handleMilestoneClick(
-                                        member.id,
-                                        member.name
-                                      )
-                                    }}
-                                    className="inline-flex items-center"
-                                  >
-                                    <Badge
-                                      variant={
-                                        member.milestonesCount > 0
-                                          ? 'default'
-                                          : 'secondary'
-                                      }
-                                      className={`cursor-pointer gap-1.5 transition-all hover:scale-105 ${
-                                        member.milestonesCount > 0
-                                          ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm'
-                                          : ''
-                                      }`}
+                                <MemberMilestonesModal
+                                  memberId={member.id}
+                                  memberName={member.name}
+                                  hideOnMobile
+                                >
+                                  <TooltipTrigger asChild>
+                                    <div
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                      }}
+                                      className="inline-flex items-center"
                                     >
-                                      <Award className="h-3 w-3" />
-                                      {member.milestonesCount}
-                                    </Badge>
-                                  </button>
-                                </TooltipTrigger>
+                                      <Badge
+                                        variant={
+                                          member.milestonesCount > 0
+                                            ? 'default'
+                                            : 'secondary'
+                                        }
+                                        className={`cursor-pointer gap-1.5 transition-all hover:scale-105 ${member.milestonesCount > 0
+                                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm'
+                                            : ''
+                                          }`}
+                                      >
+                                        <Award className="h-3 w-3" />
+                                        {member.milestonesCount}
+                                      </Badge>
+                                    </div>
+                                  </TooltipTrigger>
+                                </MemberMilestonesModal>
                                 <TooltipContent>
                                   <p>
                                     {member.milestonesCount > 0

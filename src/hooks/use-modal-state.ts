@@ -10,6 +10,7 @@ export type ModalStateOptions<TFrom extends RouteContext, TKey extends keyof Rou
   from?: TFrom;
   paramName: TKey;
   openValue: RouteSearch<TFrom>[TKey];
+  resetScroll?: boolean;
 };
 
 function saveWasPushedToStorage(key: string, value: boolean) {
@@ -20,6 +21,7 @@ function useModalState<TFrom extends RouteContext = '__root__', TKey extends key
   from: _from,
   paramName,
   openValue,
+  resetScroll = false,
 }: ModalStateOptions<TFrom, TKey> & { from?: TFrom }) {
   const router = useRouter();
   
@@ -42,7 +44,8 @@ function useModalState<TFrom extends RouteContext = '__root__', TKey extends key
     router.navigate({
       to: '.',
       search: (prev) => ({ ...prev, [paramName]: openValue }),
-      replace: false
+      replace: false,
+      resetScroll,
     });
   };
 
@@ -78,7 +81,7 @@ function useModalState<TFrom extends RouteContext = '__root__', TKey extends key
 
       console.log("running closeModal with history.back()");
       if (url && typeof url === 'string') {
-        router.navigate({ to: url, replace: true });
+        router.navigate({ to: url, replace: true, resetScroll });
       } else {
         window.history.back();
       }
@@ -86,7 +89,7 @@ function useModalState<TFrom extends RouteContext = '__root__', TKey extends key
       // Direct navigation, use push to support back button to view the modal again
       console.log("running closeModal with setValue");
       if (url && typeof url === 'string') {
-        router.navigate({ to: url, replace: false });
+        router.navigate({ to: url, replace: false, resetScroll });
       } else {
         // Push new state with param removed to support back button
         router.navigate({
@@ -96,6 +99,7 @@ function useModalState<TFrom extends RouteContext = '__root__', TKey extends key
             return rest;
           },
           replace: false,
+          resetScroll,
         });
       }
     }

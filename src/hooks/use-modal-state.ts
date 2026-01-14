@@ -6,7 +6,7 @@ type RouteSearch<TId extends keyof FileRoutesById> = InferFullSearchSchema<FileR
 
 export type RouteContext = keyof FileRoutesById
 
-type ModalStateOptions<TFrom extends RouteContext, TKey extends keyof RouteSearch<TFrom> & string> = {
+export type ModalStateOptions<TFrom extends RouteContext, TKey extends keyof RouteSearch<TFrom> & string> = {
   from?: TFrom;
   paramName: TKey;
   openValue: RouteSearch<TFrom>[TKey];

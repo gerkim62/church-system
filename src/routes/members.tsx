@@ -47,9 +47,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import z from 'zod'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
+  validateSearch: z.object({
+    "milestones-modal": z.string().optional(),
+  })
 })
 
 // Mock data for UI demonstration

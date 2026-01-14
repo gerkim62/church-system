@@ -11,6 +11,7 @@
 import type * as auth from "../auth.js";
 import type * as env from "../env.js";
 import type * as http from "../http.js";
+import type * as members from "../members.js";
 
 import type {
   ApiFromModules,
@@ -22,6 +23,7 @@ declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   env: typeof env;
   http: typeof http;
+  members: typeof members;
 }>;
 
 /**
@@ -1519,6 +1521,14 @@ export declare const components: {
               };
           onUpdateHandle?: string;
         },
+        any
+      >;
+    };
+    auth: {
+      getMember: FunctionReference<
+        "query",
+        "internal",
+        { memberId: string },
         any
       >;
     };

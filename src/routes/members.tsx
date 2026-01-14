@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
+import { usePaginatedQuery } from 'convex/react'
+import { api } from '../../convex/_generated/api'
 import {
   Search,
   UserPlus,
@@ -18,7 +20,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ResponsivePagination } from '@/components/responsive-pagination'
 import {
   Table,
   TableBody,
@@ -53,127 +54,47 @@ import { MemberMilestonesModal } from '@/features/members/components/member-mile
 export const Route = createFileRoute('/members')({
   component: MembersPage,
   validateSearch: z.object({
-    "milestones-modal": z.string().optional(),
-  })
+    'milestones-modal': z.string().optional(),
+  }),
 })
-
-// Mock data for UI demonstration
-const mockMembers = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+254 712 345 678',
-    milestonesCount: 5,
-    memberSince: new Date('2023-11-15'),
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    email: 'jane.smith@example.com',
-    phone: null,
-    milestonesCount: 12,
-    memberSince: new Date('2022-01-08'),
-  },
-  {
-    id: '3',
-    name: 'Michael Johnson',
-    email: 'michael.j@example.com',
-    phone: '+254 798 765 432',
-    milestonesCount: 3,
-    memberSince: new Date('2024-03-22'),
-  },
-  {
-    id: '4',
-    name: 'Sarah Williams',
-    email: 'sarah.w@example.com',
-    phone: '+254 723 456 789',
-    milestonesCount: 8,
-    memberSince: new Date('2023-06-10'),
-  },
-  {
-    id: '5',
-    name: 'David Brown',
-    email: 'david.brown@example.com',
-    phone: null,
-    milestonesCount: 0,
-    memberSince: new Date('2025-01-02'),
-  },
-  {
-    id: '6',
-    name: 'Emily Davis',
-    email: 'emily.d@example.com',
-    phone: '+254 711 222 333',
-    milestonesCount: 15,
-    memberSince: new Date('2021-08-19'),
-  },
-  {
-    id: '7',
-    name: 'James Wilson',
-    email: 'james.wilson@example.com',
-    phone: '+254 733 444 555',
-    milestonesCount: 7,
-    memberSince: new Date('2023-02-14'),
-  },
-  {
-    id: '8',
-    name: 'Grace Mwangi',
-    email: 'grace.m@example.com',
-    phone: null,
-    milestonesCount: 4,
-    memberSince: new Date('2024-07-30'),
-  },
-  {
-    id: '9',
-    name: 'Peter Ochieng',
-    email: 'peter.o@example.com',
-    phone: '+254 700 111 222',
-    milestonesCount: 9,
-    memberSince: new Date('2022-11-05'),
-  },
-  {
-    id: '10',
-    name: 'Mary Wanjiku',
-    email: 'mary.w@example.com',
-    phone: '+254 722 333 444',
-    milestonesCount: 11,
-    memberSince: new Date('2022-04-18'),
-  },
-]
-
-function formatDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    year: 'numeric',
-  })
-}
-
-function formatFullDate(date: Date): string {
-  return date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
-}
 
 function MembersPage() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
-  const totalMembers = 124 // Mock total for pagination demo
-  const totalPages = Math.ceil(totalMembers / itemsPerPage)
 
-  // Filter members based on search query (mock client-side filtering)
-  const filteredMembers = mockMembers.filter(
+  const { results, status, loadMore } = usePaginatedQuery(
+    api.members.list,
+    { search: searchQuery || undefined },
+    { initialNumItems: itemsPerPage }
+  )
+
+  console.log(status)
+
+  const members = results ?? []
+  const totalMembers = members.length // Approximate, Convex doesn't return total count
+
+  // Filter members based on search query (client-side for now)
+  const filteredMembers = members.filter(
     (member) =>
-      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (member.name && member.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (member.email && member.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (member.phone && member.phone.includes(searchQuery))
   )
 
-  const handleMilestoneClick = (memberId: string, memberName: string) => {
-    // TODO: Open modal or navigate to milestones page
-    console.log(`View milestones for ${memberName} (${memberId})`)
+  // Format dates
+  const formatDate = (timestamp: number): string => {
+    return new Date(timestamp).toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    })
+  }
+
+  const formatFullDate = (timestamp: number): string => {
+    return new Date(timestamp).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    })
   }
 
   const handleEditMember = (memberId: string, memberName: string) => {
@@ -254,8 +175,8 @@ function MembersPage() {
                     <Accordion type="single" collapsible className="w-full">
                       {filteredMembers.map((member) => (
                         <AccordionItem
-                          key={member.id}
-                          value={member.id}
+                          key={member._id}
+                          value={member._id}
                           className="border-border/50"
                         >
                           <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/40 [&[data-state=open]]:bg-muted/30">
@@ -263,19 +184,21 @@ function MembersPage() {
                               {/* Avatar */}
                               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                 {member.name
-                                  .split(' ')
-                                  .map((n) => n[0])
-                                  .join('')
-                                  .slice(0, 2)}
+                                  ? member.name
+                                    .split(' ')
+                                    .map((n) => n[0])
+                                    .join('')
+                                    .slice(0, 2)
+                                  : '??'}
                               </div>
 
                               {/* Name and email */}
                               <div className="flex-1 min-w-0 text-left">
                                 <p className="font-medium text-foreground truncate">
-                                  {member.name}
+                                  {member.name || 'Unknown Member'}
                                 </p>
                                 <p className="text-sm text-muted-foreground truncate">
-                                  {member.email}
+                                  {member.email || 'No email'}
                                 </p>
                               </div>
 
@@ -347,8 +270,8 @@ function MembersPage() {
 
                               {/* Milestones Button */}
                               <MemberMilestonesModal
-                                memberId={member.id}
-                                memberName={member.name}
+                                memberId={member._id}
+                                memberName={member.name || 'Unknown Member'}
                                 hideOnDesktop
                               >
                                 <button 
@@ -377,7 +300,7 @@ function MembersPage() {
                                   size="sm"
                                   className="flex-1 gap-2"
                                   onClick={() =>
-                                    handleEditMember(member.id, member.name)
+                                    handleEditMember(member._id, member.name || 'Unknown Member')
                                   }
                                 >
                                   <Pencil className="h-4 w-4" />
@@ -388,7 +311,7 @@ function MembersPage() {
                                   size="sm"
                                   className="flex-1 gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
                                   onClick={() =>
-                                    handleDeleteMember(member.id, member.name)
+                                    handleDeleteMember(member._id, member.name || 'Unknown Member')
                                   }
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -424,7 +347,7 @@ function MembersPage() {
                       <TableBody>
                         {filteredMembers.map((member) => (
                           <TableRow
-                            key={member.id}
+                            key={member._id}
                             className="group cursor-pointer transition-colors hover:bg-muted/40"
                           >
                             {/* Name */}
@@ -432,13 +355,15 @@ function MembersPage() {
                               <div className="flex items-center gap-3">
                                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                   {member.name
-                                    .split(' ')
-                                    .map((n) => n[0])
-                                    .join('')
-                                    .slice(0, 2)}
+                                    ? member.name
+                                      .split(' ')
+                                      .map((n) => n[0])
+                                      .join('')
+                                      .slice(0, 2)
+                                    : '??'}
                                 </div>
                                 <span className="group-hover:text-primary transition-colors">
-                                  {member.name}
+                                  {member.name || 'Unknown Member'}
                                 </span>
                               </div>
                             </TableCell>
@@ -448,7 +373,7 @@ function MembersPage() {
                               <div className="flex items-center gap-2 text-muted-foreground">
                                 <Mail className="h-3.5 w-3.5 shrink-0" />
                                 <span className="max-w-[200px] truncate">
-                                  {member.email}
+                                  {member.email || 'No email'}
                                 </span>
                               </div>
                             </TableCell>
@@ -471,8 +396,8 @@ function MembersPage() {
                             <TableCell className="text-center">
                               <Tooltip>
                                 <MemberMilestonesModal
-                                  memberId={member.id}
-                                  memberName={member.name}
+                                  memberId={member._id}
+                                  memberName={member.name || 'Unknown Member'}
                                   hideOnMobile
                                 >
                                   <TooltipTrigger asChild>
@@ -531,7 +456,7 @@ function MembersPage() {
                                 <DropdownMenuContent align="end" className="w-40">
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleEditMember(member.id, member.name)
+                                      handleEditMember(member._id, member.name || 'Unknown Member')
                                     }
                                     className="gap-2 cursor-pointer"
                                   >
@@ -541,7 +466,7 @@ function MembersPage() {
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleDeleteMember(member.id, member.name)
+                                      handleDeleteMember(member._id, member.name || 'Unknown Member')
                                     }
                                     className="gap-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                                   >
@@ -562,19 +487,20 @@ function MembersPage() {
               {/* Pagination */}
               {filteredMembers.length > 0 && (
                 <div className="border-t bg-muted/20 px-4 py-3">
-                  <ResponsivePagination
-                    meta={{
-                      page: currentPage,
-                      totalPages: totalPages,
-                      hasNext: currentPage < totalPages,
-                      hasPrev: currentPage > 1,
-                      limit: itemsPerPage,
-                      total: totalMembers,
-                    }}
-                    onPageChange={setCurrentPage}
-              
-                    itemName="members"
-                  />
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                      Showing {filteredMembers.length} member{filteredMembers.length !== 1 ? 's' : ''}
+                    </p>
+                    {status === 'CanLoadMore' && (
+                      <Button
+                        onClick={() => loadMore(itemsPerPage)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Load More
+                      </Button>
+                    )}
+                  </div>
                 </div>
               )}
 

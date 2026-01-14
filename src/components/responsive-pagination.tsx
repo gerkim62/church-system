@@ -5,8 +5,6 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination"
 import { 
   ChevronsLeft, 
@@ -18,17 +16,23 @@ import type { PaginationMeta } from "@/lib/pagination"
 
 
 export interface ResponsivePaginationProps {
-  meta: PaginationMeta
+  // without unnecessary
+  meta: 
+  PaginationMeta
+
   onPageChange: (page: number) => void
   siblingCount?: number
+
+  itemName?: string
 }
 
 export function ResponsivePagination({
   meta,
   onPageChange,
   siblingCount = 1,
+  itemName = "items",
 }: ResponsivePaginationProps) {
-  const { page, totalPages, hasNext, hasPrev } = meta
+  const { page, totalPages, hasNext, hasPrev, limit,total } = meta
 
   // Logic to calculate the array of page numbers (e.g. [1, 2, '...', 10])
   const paginationRange = React.useMemo(() => {
@@ -79,9 +83,29 @@ export function ResponsivePagination({
 
   if (totalPages <= 1) return null
 
+  const showingText = (
+    <p className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+      Showing{' '}
+      <span className="font-medium text-foreground">
+        {(page - 1) * limit + 1}
+      </span>{' '}
+      to{' '}
+      <span className="font-medium text-foreground">
+        {Math.min(page * limit, total)}
+      </span>{' '}
+      of{' '}
+      <span className="font-medium text-foreground">
+        {total}
+      </span>{' '}
+      {itemName}
+    </p>
+  )
+
   return (
-    <Pagination>
-      <PaginationContent className="w-full justify-between sm:justify-center">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+      {showingText}
+      <Pagination className="mx-0 justify-center sm:justify-end">
+        <PaginationContent className="justify-between sm:justify-end">
         
         {/* First Page Button */}
         <PaginationItem>
@@ -100,8 +124,8 @@ export function ResponsivePagination({
 
         {/* Previous Button */}
         <PaginationItem>
-          <PaginationPrevious
-            href="#"
+          <PaginationLink
+            aria-label="Go to previous page"
             size="icon"
             className={!hasPrev ? "pointer-events-none opacity-50" : "cursor-pointer"}
             onClick={(e) => {
@@ -110,11 +134,11 @@ export function ResponsivePagination({
             }}
           >
             <ChevronLeft className="h-4 w-4" />
-          </PaginationPrevious>
+          </PaginationLink>
         </PaginationItem>
 
         {/* MOBILE VIEW: Simple Text (Hidden on sm screens and up) */}
-        <div className="flex items-center text-sm font-medium sm:hidden mx-2">
+        <div className="flex items-center text-sm font-medium sm:hidden mx-2 whitespace-nowrap">
           Page {page} of {totalPages}
         </div>
 
@@ -150,8 +174,8 @@ export function ResponsivePagination({
 
         {/* Next Button */}
         <PaginationItem>
-          <PaginationNext
-            href="#"
+          <PaginationLink
+            aria-label="Go to next page"
             size="icon"
             className={!hasNext ? "pointer-events-none opacity-50" : "cursor-pointer"}
             onClick={(e) => {
@@ -160,7 +184,7 @@ export function ResponsivePagination({
             }}
           >
             <ChevronRight className="h-4 w-4" />
-          </PaginationNext>
+          </PaginationLink>
         </PaginationItem>
 
         {/* Last Page Button */}
@@ -180,5 +204,6 @@ export function ResponsivePagination({
 
       </PaginationContent>
     </Pagination>
+    </div>
   )
 }

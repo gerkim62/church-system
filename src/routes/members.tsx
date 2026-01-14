@@ -9,12 +9,16 @@ import {
   Award,
   ChevronRight,
   Calendar,
+  MoreVertical,
+  Pencil,
+  Trash2,
 } from 'lucide-react'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ResponsivePagination } from '@/components/responsive-pagination'
 import {
   Table,
   TableBody,
@@ -23,15 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
+
 import {
   Tooltip,
   TooltipContent,
@@ -44,6 +40,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -166,6 +169,16 @@ function MembersPage() {
   const handleMilestoneClick = (memberId: string, memberName: string) => {
     // TODO: Open modal or navigate to milestones page
     console.log(`View milestones for ${memberName} (${memberId})`)
+  }
+
+  const handleEditMember = (memberId: string, memberName: string) => {
+    // TODO: Open edit modal or navigate to edit page
+    console.log(`Edit member: ${memberName} (${memberId})`)
+  }
+
+  const handleDeleteMember = (memberId: string, memberName: string) => {
+    // TODO: Open delete confirmation dialog
+    console.log(`Delete member: ${memberName} (${memberId})`)
   }
 
   return (
@@ -347,6 +360,32 @@ function MembersPage() {
                                 </div>
                                 <ChevronRight className="h-4 w-4 text-muted-foreground mr-3" />
                               </button>
+
+                              {/* Action Buttons */}
+                              <div className="flex gap-2 pt-2 mt-2 border-t border-border/50">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1 gap-2"
+                                  onClick={() =>
+                                    handleEditMember(member.id, member.name)
+                                  }
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                  Edit
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1 gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
+                                  onClick={() =>
+                                    handleDeleteMember(member.id, member.name)
+                                  }
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  Delete
+                                </Button>
+                              </div>
                             </div>
                           </AccordionContent>
                         </AccordionItem>
@@ -367,6 +406,9 @@ function MembersPage() {
                           </TableHead>
                           <TableHead className="font-semibold text-right">
                             Member Since
+                          </TableHead>
+                          <TableHead className="font-semibold text-right w-[70px]">
+                            Actions
                           </TableHead>
                         </TableRow>
                       </TableHeader>
@@ -461,6 +503,44 @@ function MembersPage() {
                             <TableCell className="text-right text-muted-foreground">
                               {formatDate(member.memberSince)}
                             </TableCell>
+
+                            {/* Actions */}
+                            <TableCell className="text-right">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <MoreVertical className="h-4 w-4" />
+                                    <span className="sr-only">Open menu</span>
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end" className="w-40">
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleEditMember(member.id, member.name)
+                                    }
+                                    className="gap-2 cursor-pointer"
+                                  >
+                                    <Pencil className="h-4 w-4" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleDeleteMember(member.id, member.name)
+                                    }
+                                    className="gap-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -471,100 +551,23 @@ function MembersPage() {
 
               {/* Pagination */}
               {filteredMembers.length > 0 && (
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t bg-muted/20 px-4 py-3">
-                  <p className="text-xs sm:text-sm text-muted-foreground text-center sm:text-left">
-                    Showing{' '}
-                    <span className="font-medium text-foreground">
-                      {(currentPage - 1) * itemsPerPage + 1}
-                    </span>{' '}
-                    to{' '}
-                    <span className="font-medium text-foreground">
-                      {Math.min(currentPage * itemsPerPage, totalMembers)}
-                    </span>{' '}
-                    of{' '}
-                    <span className="font-medium text-foreground">
-                      {totalMembers}
-                    </span>{' '}
-                    members
-                  </p>
-
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setCurrentPage((p) => Math.max(1, p - 1))
-                          }}
-                          className={
-                            currentPage === 1
-                              ? 'pointer-events-none opacity-50'
-                              : 'cursor-pointer'
-                          }
-                        />
-                      </PaginationItem>
-
-                      {/* Page numbers - hide some on mobile */}
-                      {[1, 2, 3].map((page) => (
-                        <PaginationItem
-                          key={page}
-                          className={page > 1 ? 'hidden sm:block' : ''}
-                        >
-                          <PaginationLink
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setCurrentPage(page)
-                            }}
-                            isActive={currentPage === page}
-                            className="cursor-pointer"
-                          >
-                            {page}
-                          </PaginationLink>
-                        </PaginationItem>
-                      ))}
-
-                      {totalPages > 4 && (
-                        <PaginationItem className="hidden sm:block">
-                          <PaginationEllipsis />
-                        </PaginationItem>
-                      )}
-
-                      {totalPages > 3 && (
-                        <PaginationItem className="hidden sm:block">
-                          <PaginationLink
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setCurrentPage(totalPages)
-                            }}
-                            isActive={currentPage === totalPages}
-                            className="cursor-pointer"
-                          >
-                            {totalPages}
-                          </PaginationLink>
-                        </PaginationItem>
-                      )}
-
-                      <PaginationItem>
-                        <PaginationNext
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setCurrentPage((p) => Math.min(totalPages, p + 1))
-                          }}
-                          className={
-                            currentPage === totalPages
-                              ? 'pointer-events-none opacity-50'
-                              : 'cursor-pointer'
-                          }
-                        />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
+                <div className="border-t bg-muted/20 px-4 py-3">
+                  <ResponsivePagination
+                    meta={{
+                      page: currentPage,
+                      totalPages: totalPages,
+                      hasNext: currentPage < totalPages,
+                      hasPrev: currentPage > 1,
+                      limit: itemsPerPage,
+                      total: totalMembers,
+                    }}
+                    onPageChange={setCurrentPage}
+              
+                    itemName="members"
+                  />
                 </div>
               )}
+
             </CardContent>
           </Card>
         </div>

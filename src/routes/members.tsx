@@ -51,6 +51,7 @@ import {
 import z from 'zod'
 import { MemberMilestonesModal } from '@/features/members/components/member-milestones-modal'
 import { cn } from '@/lib/utils'
+import { formatDate, formatFullDate } from '@/lib/formatters'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -63,40 +64,11 @@ function MembersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const itemsPerPage = 10
 
-  const { results, status, loadMore } = usePaginatedQuery(
+  const { results: members, status, loadMore } = usePaginatedQuery(
     api.members.list,
     { search: searchQuery || undefined },
     { initialNumItems: itemsPerPage }
   )
-
-  console.log(status)
-
-  const members = results ?? []
-  const totalMembers = members.length // Approximate, Convex doesn't return total count
-
-  // Filter members based on search query (client-side for now)
-  const filteredMembers = members.filter(
-    (member) =>
-      (member.name && member.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (member.email && member.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (member.phoneNumber && member.phoneNumber.includes(searchQuery))
-  )
-
-  // Format dates
-  const formatDate = (timestamp: number): string => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric',
-    })
-  }
-
-  const formatFullDate = (timestamp: number): string => {
-    return new Date(timestamp).toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    })
-  }
 
   const handleEditMember = (memberId: string, memberName: string) => {
     // TODO: Open edit modal or navigate to edit page
@@ -113,22 +85,17 @@ function MembersPage() {
       <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-7xl space-y-6">
           {/* Header Section */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="space-y-1">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="space-y-2">
               <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
-                  <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/70 text-primary-foreground shadow-lg shadow-primary/25">
+                  <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
-                Members
+                Church Members
               </h1>
-              <p className="text-sm sm:text-base text-muted-foreground">
-                <span className="font-semibold text-foreground">
-                  {totalMembers}
-                </span>{' '}
-                total members in your church
-              </p>
+           
             </div>
-            <Button className="gap-2 shadow-md transition-all hover:shadow-lg w-full sm:w-auto">
+            <Button size="lg" className="gap-2 shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
               <UserPlus className="h-4 w-4" />
               Add Member
             </Button>
@@ -157,7 +124,7 @@ function MembersPage() {
 
             <CardContent className="p-0">
               {/* Empty State */}
-              {filteredMembers.length === 0 ? (
+              {members.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/50 mb-4">
                     <Users className="h-8 w-8 text-muted-foreground/60" />
@@ -174,7 +141,7 @@ function MembersPage() {
                   {/* Mobile: Accordion List */}
                   <div className="md:hidden">
                     <Accordion type="single" collapsible className="w-full">
-                      {filteredMembers.map((member) => (
+                      {members.map((member) => (
                         <AccordionItem
                           key={member.id}
                           value={member.id}
@@ -345,7 +312,7 @@ function MembersPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {filteredMembers.map((member) => (
+                        {members.map((member) => (
                           <TableRow
                             key={member.id}
                             className="group cursor-pointer transition-colors hover:bg-muted/40"
@@ -428,7 +395,7 @@ function MembersPage() {
                                   <p>
                                     {member.milestonesAchieved.length > 0
                                       ? `View ${member.milestonesAchieved.length} milestone${member.milestonesAchieved.length > 1 ? 's' : ''}`
-                                      : 'No milestones yet'}
+                                      : 'No milestones achieved yet'}
                                   </p>
                                 </TooltipContent>
                               </Tooltip>
@@ -485,11 +452,11 @@ function MembersPage() {
               )}
 
               {/* Pagination */}
-              {filteredMembers.length > 0 && (
+              {members.length > 0 && (
                 <div className="border-t bg-muted/20 px-4 py-3">
                   <div className="flex items-center justify-between">
                     <p className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                      Showing {filteredMembers.length} member{filteredMembers.length !== 1 ? 's' : ''}
+                      Showing {members.length} member{members.length !== 1 ? 's' : ''}
                     </p>
                     {status === 'CanLoadMore' && (
                       <Button

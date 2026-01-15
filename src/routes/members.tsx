@@ -84,6 +84,7 @@ function MembersPage() {
     results: members,
     status,
     loadMore,
+    isLoading
   } = usePaginatedQuery(
     api.members.list,
     session.data ? { search: debouncedSearch } : 'skip',
@@ -162,8 +163,75 @@ function MembersPage() {
             </CardHeader>
 
             <CardContent className="p-0">
-              {/* Empty State */}
-              {members.length === 0 ? (
+              {/* Loading State */}
+              {isLoading ? (
+                <>
+                  {/* Mobile: Loading Skeleton */}
+                  <div className="md:hidden divide-y divide-border/50">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <div key={i} className="p-4 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-muted animate-pulse" />
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                            <div className="h-3 w-48 bg-muted animate-pulse rounded" />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Desktop: Loading Skeleton */}
+                  <div className="hidden md:block">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-muted/20 hover:bg-muted/20">
+                          <TableHead className="font-semibold">Name</TableHead>
+                          <TableHead className="font-semibold">Email</TableHead>
+                          <TableHead className="font-semibold">Phone</TableHead>
+                          <TableHead className="font-semibold text-center">
+                            Milestones
+                          </TableHead>
+                          <TableHead className="font-semibold text-right">
+                            Member Since
+                          </TableHead>
+                          <TableHead className="font-semibold text-right w-17.5">
+                            Actions
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <TableRow key={i}>
+                            <TableCell>
+                              <div className="flex items-center gap-3">
+                                <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />
+                                <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="h-4 w-48 bg-muted animate-pulse rounded" />
+                            </TableCell>
+                            <TableCell>
+                              <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                            </TableCell>
+                            <TableCell className="text-center">
+                              <div className="h-6 w-12 bg-muted animate-pulse rounded-full mx-auto" />
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="h-4 w-24 bg-muted animate-pulse rounded ml-auto" />
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="h-8 w-8 bg-muted animate-pulse rounded ml-auto" />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </>
+              ) : members.length === 0 ? (
+                /* Empty State */
                 <Empty className="py-16">
                   <EmptyHeader>
                     <EmptyMedia

@@ -52,6 +52,14 @@ import z from 'zod'
 import { MemberMilestonesModal } from '@/features/members/components/member-milestones-modal'
 import { cn } from '@/lib/utils'
 import { formatDate, formatFullDate } from '@/lib/formatters'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -125,17 +133,25 @@ function MembersPage() {
             <CardContent className="p-0">
               {/* Empty State */}
               {members.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/50 mb-4">
-                    <Users className="h-8 w-8 text-muted-foreground/60" />
-                  </div>
-                  <p className="text-muted-foreground font-medium">
-                    No members found
-                  </p>
-                  <p className="text-sm text-muted-foreground/70 mt-1">
-                    Try adjusting your search terms
-                  </p>
-                </div>
+                <Empty className="py-16">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon" className="size-14 rounded-full bg-muted">
+                      <Users className="size-7 text-muted-foreground" />
+                    </EmptyMedia>
+                    <EmptyTitle>No members found</EmptyTitle>
+                    <EmptyDescription>
+                      {searchQuery
+                        ? 'Try adjusting your search terms or clear the search'
+                        : 'Get started by adding church members'}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                  <EmptyContent>
+                    <Button className="gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      Add Member
+                    </Button>
+                  </EmptyContent>
+                </Empty>
               ) : (
                 <>
                   {/* Mobile: Accordion List */}

@@ -72,10 +72,14 @@ function MembersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const itemsPerPage = 10
 
-  const { results: members, status, loadMore } = usePaginatedQuery(
+  const {
+    results: members,
+    status,
+    loadMore,
+  } = usePaginatedQuery(
     api.members.list,
-    { search: searchQuery || undefined },
-    { initialNumItems: itemsPerPage }
+    { search: searchQuery },
+    { initialNumItems: itemsPerPage },
   )
 
   const handleEditMember = (memberId: string, memberName: string) => {
@@ -101,9 +105,11 @@ function MembersPage() {
                 </div>
                 Church Members
               </h1>
-           
             </div>
-            <Button size="lg" className="gap-2 shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]">
+            <Button
+              size="lg"
+              className="gap-2 shadow-md transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+            >
               <UserPlus className="h-4 w-4" />
               Add Member
             </Button>
@@ -135,7 +141,10 @@ function MembersPage() {
               {members.length === 0 ? (
                 <Empty className="py-16">
                   <EmptyHeader>
-                    <EmptyMedia variant="icon" className="size-14 rounded-full bg-muted">
+                    <EmptyMedia
+                      variant="icon"
+                      className="size-14 rounded-full bg-muted"
+                    >
                       <Users className="size-7 text-muted-foreground" />
                     </EmptyMedia>
                     <EmptyTitle>No members found</EmptyTitle>
@@ -169,10 +178,10 @@ function MembersPage() {
                               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                 {member.name
                                   ? member.name
-                                    .split(' ')
-                                    .map((n) => n[0])
-                                    .join('')
-                                    .slice(0, 2)
+                                      .split(' ')
+                                      .map((n) => n[0])
+                                      .join('')
+                                      .slice(0, 2)
                                   : '??'}
                               </div>
 
@@ -194,8 +203,9 @@ function MembersPage() {
                                     : 'secondary'
                                 }
                                 className={cn(
-                                  "shrink-0 gap-1 mr-2 hidden",
-                                  member.milestonesAchieved.length > 0 && "bg-linear-to-r from-amber-500 to-orange-500"
+                                  'shrink-0 gap-1 mr-2 hidden',
+                                  member.milestonesAchieved.length > 0 &&
+                                    'bg-linear-to-r from-amber-500 to-orange-500',
                                 )}
                               >
                                 <Award className="h-3 w-3" />
@@ -230,7 +240,14 @@ function MembersPage() {
                                   <p className="text-xs text-muted-foreground">
                                     Phone
                                   </p>
-                                  <p className={cn("text-sm text-foreground", member.phoneNumber ? "" : "text-muted-foreground")}>
+                                  <p
+                                    className={cn(
+                                      'text-sm text-foreground',
+                                      member.phoneNumber
+                                        ? ''
+                                        : 'text-muted-foreground',
+                                    )}
+                                  >
                                     {member.phoneNumber || 'Not provided'}
                                   </p>
                                 </div>
@@ -257,7 +274,7 @@ function MembersPage() {
                                 memberName={member.name}
                                 hideOnDesktop
                               >
-                                <button 
+                                <button
                                   onClick={(e) => e.stopPropagation()}
                                   className="flex items-center gap-3 w-full rounded-lg bg-linear-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 transition-all p-3"
                                 >
@@ -269,7 +286,8 @@ function MembersPage() {
                                       Milestones
                                     </p>
                                     <p className="text-sm font-semibold text-foreground">
-                                      {member.milestonesAchieved.length} achieved
+                                      {member.milestonesAchieved.length}{' '}
+                                      achieved
                                     </p>
                                   </div>
                                   <ChevronRight className="h-5 w-5 text-amber-500" />
@@ -339,10 +357,10 @@ function MembersPage() {
                                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                   {member.name
                                     ? member.name
-                                      .split(' ')
-                                      .map((n) => n[0])
-                                      .join('')
-                                      .slice(0, 2)
+                                        .split(' ')
+                                        .map((n) => n[0])
+                                        .join('')
+                                        .slice(0, 2)
                                     : '??'}
                                 </div>
                                 <span className="group-hover:text-primary transition-colors">
@@ -397,9 +415,11 @@ function MembersPage() {
                                             : 'secondary'
                                         }
                                         className={cn(
-                                            "cursor-pointer gap-1.5 transition-all hover:scale-105",
-                                            member.milestonesAchieved.length > 0 && "bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm"
-                                          )}
+                                          'cursor-pointer gap-1.5 transition-all hover:scale-105',
+                                          member.milestonesAchieved.length >
+                                            0 &&
+                                            'bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm',
+                                        )}
                                       >
                                         <Award className="h-3 w-3" />
                                         {member.milestonesAchieved.length}
@@ -436,7 +456,10 @@ function MembersPage() {
                                     <span className="sr-only">Open menu</span>
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="w-40">
+                                <DropdownMenuContent
+                                  align="end"
+                                  className="w-40"
+                                >
                                   <DropdownMenuItem
                                     onClick={() =>
                                       handleEditMember(member.id, member.name)
@@ -472,7 +495,8 @@ function MembersPage() {
                 <div className="border-t bg-muted/20 px-4 py-3">
                   <div className="flex items-center justify-between">
                     <p className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                      Showing {members.length} member{members.length !== 1 ? 's' : ''}
+                      Showing {members.length} member
+                      {members.length !== 1 ? 's' : ''}
                     </p>
                     {status === 'CanLoadMore' && (
                       <Button
@@ -486,7 +510,6 @@ function MembersPage() {
                   </div>
                 </div>
               )}
-
             </CardContent>
           </Card>
         </div>

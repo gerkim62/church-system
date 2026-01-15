@@ -61,6 +61,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from '@/components/ui/empty'
+import { authClient } from '@/lib/auth-client'
+import { unauthorized } from '~/convex/helpers/errorHelpers'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -70,17 +72,21 @@ export const Route = createFileRoute('/members')({
 })
 
 function MembersPage() {
+  // All hooks must be called at the top, before any conditional returns
+  const session = authClient.useSession()
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearch] = useDebounce(searchQuery, 300)
   const itemsPerPage = 10
 
+  // Only fetch members data when authenticated
+  // Skip the query if not authenticated
   const {
     results: members,
     status,
     loadMore,
   } = usePaginatedQuery(
     api.members.list,
-    { search: debouncedSearch },
+    session.data ? { search: debouncedSearch } : 'skip',
     { initialNumItems: itemsPerPage },
   )
 
@@ -92,6 +98,23 @@ function MembersPage() {
   const handleDeleteMember = (memberId: string, memberName: string) => {
     // TODO: Open delete confirmation dialog
     console.log(`Delete member: ${memberName} (${memberId})`)
+  }
+
+  // Show loading state while checking authentication
+  if (session.isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-background via-background to-muted/20">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Show sign in prompt if not authenticated
+  if (!session.data) {
+   throw unauthorized()
   }
 
   return (

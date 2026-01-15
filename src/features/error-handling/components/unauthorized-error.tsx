@@ -1,10 +1,36 @@
+import { useLayoutEffect, useRef } from 'react'
 import { useNavigate } from '@tanstack/react-router'
+import { useErrorBoundary } from 'react-error-boundary'
 import { Button } from '@/components/ui/button'
 import { LogIn, Home } from 'lucide-react'
 import SignInModal from '@/features/auth/signin-modal'
+import { authClient } from '@/lib/auth-client'
 
+/**
+ * Shows unauthorized error and automatically refreshes when session becomes available.
+ * Monitors auth state and triggers error boundary reset upon successful login.
+ */
 export function UnauthorizedError() {
   const navigate = useNavigate()
+  const { resetBoundary } = useErrorBoundary()
+  const session = authClient.useSession()
+  const hasCheckedInitialSession = useRef(false)
+
+  // Monitor session state and reset error boundary when user logs in
+  // Uses useLayoutEffect to reset immediately before paint
+  useLayoutEffect(() => {
+    // Skip the first render to avoid false positive (session was already null)
+    if (!hasCheckedInitialSession.current) {
+      hasCheckedInitialSession.current = true
+      return
+    }
+
+    // When session becomes available after being null, reset the error boundary
+    // This will re-render the protected component with the new session
+    if (session.data) {
+      resetBoundary()
+    }
+  }, [session.data, resetBoundary])
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">

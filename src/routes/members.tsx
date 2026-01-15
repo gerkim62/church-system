@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { usePaginatedQuery } from 'convex/react'
+import { useDebounce } from 'use-debounce'
 import { api } from '../../convex/_generated/api'
 import {
   Search,
@@ -70,6 +71,7 @@ export const Route = createFileRoute('/members')({
 
 function MembersPage() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearch] = useDebounce(searchQuery, 300)
   const itemsPerPage = 10
 
   const {
@@ -78,7 +80,7 @@ function MembersPage() {
     loadMore,
   } = usePaginatedQuery(
     api.members.list,
-    { search: searchQuery },
+    { search: debouncedSearch },
     { initialNumItems: itemsPerPage },
   )
 

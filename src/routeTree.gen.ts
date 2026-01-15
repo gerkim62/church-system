@@ -9,17 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MembersRouteImport } from './routes/members'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoErrorBoundaryRouteImport } from './routes/demo/error-boundary'
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
 import { Route as DemoAuthRouteImport } from './routes/demo/auth'
+import { Route as AuthedMembersRouteImport } from './routes/_authed/members'
+import { Route as AuthedObNoChurchRouteImport } from './routes/_authed/ob/no-church'
 
-const MembersRoute = MembersRouteImport.update({
-  id: '/members',
-  path: '/members',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -40,28 +36,41 @@ const DemoAuthRoute = DemoAuthRouteImport.update({
   path: '/demo/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedMembersRoute = AuthedMembersRouteImport.update({
+  id: '/_authed/members',
+  path: '/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedObNoChurchRoute = AuthedObNoChurchRouteImport.update({
+  id: '/_authed/ob/no-church',
+  path: '/ob/no-church',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/members': typeof MembersRoute
+  '/members': typeof AuthedMembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
+  '/ob/no-church': typeof AuthedObNoChurchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/members': typeof MembersRoute
+  '/members': typeof AuthedMembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
+  '/ob/no-church': typeof AuthedObNoChurchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/members': typeof MembersRoute
+  '/_authed/members': typeof AuthedMembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
+  '/_authed/ob/no-church': typeof AuthedObNoChurchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,34 +80,36 @@ export interface FileRouteTypes {
     | '/demo/auth'
     | '/demo/convex'
     | '/demo/error-boundary'
+    | '/ob/no-church'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/members' | '/demo/auth' | '/demo/convex' | '/demo/error-boundary'
-  id:
-    | '__root__'
+  to:
     | '/'
     | '/members'
     | '/demo/auth'
     | '/demo/convex'
     | '/demo/error-boundary'
+    | '/ob/no-church'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authed/members'
+    | '/demo/auth'
+    | '/demo/convex'
+    | '/demo/error-boundary'
+    | '/_authed/ob/no-church'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MembersRoute: typeof MembersRoute
+  AuthedMembersRoute: typeof AuthedMembersRoute
   DemoAuthRoute: typeof DemoAuthRoute
   DemoConvexRoute: typeof DemoConvexRoute
   DemoErrorBoundaryRoute: typeof DemoErrorBoundaryRoute
+  AuthedObNoChurchRoute: typeof AuthedObNoChurchRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/members': {
-      id: '/members'
-      path: '/members'
-      fullPath: '/members'
-      preLoaderRoute: typeof MembersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -127,15 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/members': {
+      id: '/_authed/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof AuthedMembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed/ob/no-church': {
+      id: '/_authed/ob/no-church'
+      path: '/ob/no-church'
+      fullPath: '/ob/no-church'
+      preLoaderRoute: typeof AuthedObNoChurchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MembersRoute: MembersRoute,
+  AuthedMembersRoute: AuthedMembersRoute,
   DemoAuthRoute: DemoAuthRoute,
   DemoConvexRoute: DemoConvexRoute,
   DemoErrorBoundaryRoute: DemoErrorBoundaryRoute,
+  AuthedObNoChurchRoute: AuthedObNoChurchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -16,7 +16,7 @@ import {
   Users,
 } from 'lucide-react'
 import z from 'zod'
-import { api } from '../../convex/_generated/api'
+import { api } from '../../../convex/_generated/api'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -65,7 +65,7 @@ import {
 import { authClient } from '@/lib/auth-client'
 import { unauthorized } from '~/convex/helpers/errorHelpers'
 
-export const Route = createFileRoute('/members')({
+export const Route = createFileRoute('/_authed/members')({
   component: MembersPage,
   validateSearch: z.object({
     'milestones-modal': z.string().optional(),
@@ -116,7 +116,7 @@ function MembersPage() {
 
   // Show sign in prompt if not authenticated
   if (!session.data) {
-   throw unauthorized()
+    throw unauthorized()
   }
 
   return (
@@ -233,7 +233,7 @@ function MembersPage() {
                 </>
               ) : members.length === 0 ? (
                 /* Empty State */
-                <Empty className="py-16">
+                (<Empty className="py-16">
                   <EmptyHeader>
                     <EmptyMedia
                       variant="icon"
@@ -254,7 +254,7 @@ function MembersPage() {
                       Add Member
                     </Button>
                   </EmptyContent>
-                </Empty>
+                </Empty>)
               ) : (
                 <>
                   {/* Mobile: Accordion List */}
@@ -272,10 +272,10 @@ function MembersPage() {
                               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                 {member.name
                                   ? member.name
-                                      .split(' ')
-                                      .map((n) => n[0])
-                                      .join('')
-                                      .slice(0, 2)
+                                    .split(' ')
+                                    .map((n) => n[0])
+                                    .join('')
+                                    .slice(0, 2)
                                   : '??'}
                               </div>
 
@@ -299,7 +299,7 @@ function MembersPage() {
                                 className={cn(
                                   'shrink-0 gap-1 mr-2 hidden',
                                   member.milestonesAchieved.length > 0 &&
-                                    'bg-linear-to-r from-amber-500 to-orange-500',
+                                  'bg-linear-to-r from-amber-500 to-orange-500',
                                 )}
                               >
                                 <Award className="h-3 w-3" />
@@ -451,10 +451,10 @@ function MembersPage() {
                                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                   {member.name
                                     ? member.name
-                                        .split(' ')
-                                        .map((n) => n[0])
-                                        .join('')
-                                        .slice(0, 2)
+                                      .split(' ')
+                                      .map((n) => n[0])
+                                      .join('')
+                                      .slice(0, 2)
                                     : '??'}
                                 </div>
                                 <span className="group-hover:text-primary transition-colors">
@@ -511,8 +511,8 @@ function MembersPage() {
                                         className={cn(
                                           'cursor-pointer gap-1.5 transition-all hover:scale-105',
                                           member.milestonesAchieved.length >
-                                            0 &&
-                                            'bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm',
+                                          0 &&
+                                          'bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm',
                                         )}
                                       >
                                         <Award className="h-3 w-3" />

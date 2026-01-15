@@ -117,7 +117,7 @@ export async function handleNoActiveOrg(authCtx: AuthContext) {
   // No organizations - redirect to create one
   if (orgs.length === 0) {
     console.log('No organizations found, redirecting to new hire shop modal')
-   throw redirect(`/ob/create-organization`)
+   throw redirect(`/ob/no-church`)
   }
 
   // Single organization - automatically set it as active and refetch
@@ -140,7 +140,7 @@ export async function handleNoActiveOrg(authCtx: AuthContext) {
   }
 
   // Multiple organizations - let user choose
- throw redirect(`/ob/select-organization`)
+ throw redirect(`/ob/select-church`)
 }
 
 // USAGE EXAMPLE:

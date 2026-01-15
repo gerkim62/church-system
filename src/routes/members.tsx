@@ -110,13 +110,13 @@ function MembersPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-linear-to-br from-background via-background to-muted/20 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-7xl space-y-6">
           {/* Header Section */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
               <h1 className="flex items-center gap-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
-                <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
+                <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
                   <Users className="h-4 w-4 sm:h-5 sm:w-5" />
                 </div>
                 Members
@@ -180,10 +180,10 @@ function MembersPage() {
                           value={member.id}
                           className="border-border/50"
                         >
-                          <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/40 [&[data-state=open]]:bg-muted/30">
+                          <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/40 data-[state=open]:bg-muted/30">
                             <div className="flex items-center gap-3 flex-1 min-w-0">
                               {/* Avatar */}
-                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
+                              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                 {member.name
                                   ? member.name
                                     .split(' ')
@@ -210,11 +210,10 @@ function MembersPage() {
                                     ? 'default'
                                     : 'secondary'
                                 }
-                                className={`shrink-0 gap-1 mr-2 hidden ${
-                                  member.milestonesAchieved.length > 0
-                                    ? 'bg-gradient-to-r from-amber-500 to-orange-500'
-                                    : ''
-                                }`}
+                                className={cn(
+                                  "shrink-0 gap-1 mr-2 hidden",
+                                  member.milestonesAchieved.length > 0 && "bg-linear-to-r from-amber-500 to-orange-500"
+                                )}
                               >
                                 <Award className="h-3 w-3" />
                                 {member.milestonesAchieved.length}
@@ -277,9 +276,9 @@ function MembersPage() {
                               >
                                 <button 
                                   onClick={(e) => e.stopPropagation()}
-                                  className="flex items-center gap-3 w-full rounded-lg bg-gradient-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 transition-all p-3"
+                                  className="flex items-center gap-3 w-full rounded-lg bg-linear-to-r from-amber-500/10 to-orange-500/10 hover:from-amber-500/20 hover:to-orange-500/20 border border-amber-500/20 transition-all p-3"
                                 >
-                                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-500 to-orange-500 shadow-md">
+                                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-amber-500 to-orange-500 shadow-md">
                                     <Award className="h-5 w-5 text-white" />
                                   </div>
                                   <div className="flex-1 text-left">
@@ -340,7 +339,7 @@ function MembersPage() {
                           <TableHead className="font-semibold text-right">
                             Member Since
                           </TableHead>
-                          <TableHead className="font-semibold text-right w-[70px]">
+                          <TableHead className="font-semibold text-right w-17.5">
                             Actions
                           </TableHead>
                         </TableRow>
@@ -354,7 +353,7 @@ function MembersPage() {
                             {/* Name */}
                             <TableCell className="font-medium">
                               <div className="flex items-center gap-3">
-                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
+                                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-linear-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary ring-2 ring-primary/10">
                                   {member.name
                                     ? member.name
                                       .split(' ')
@@ -373,7 +372,7 @@ function MembersPage() {
                             <TableCell>
                               <div className="flex items-center gap-2 text-muted-foreground">
                                 <Mail className="h-3.5 w-3.5 shrink-0" />
-                                <span className="max-w-[200px] truncate">
+                                <span className="max-w-50 truncate">
                                   {member.email}
                                 </span>
                               </div>
@@ -414,10 +413,10 @@ function MembersPage() {
                                             ? 'default'
                                             : 'secondary'
                                         }
-                                        className={`cursor-pointer gap-1.5 transition-all hover:scale-105 ${member.milestonesAchieved.length > 0
-                                            ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm'
-                                            : ''
-                                          }`}
+                                        className={cn(
+                                            "cursor-pointer gap-1.5 transition-all hover:scale-105",
+                                            member.milestonesAchieved.length > 0 && "bg-linear-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm"
+                                          )}
                                       >
                                         <Award className="h-3 w-3" />
                                         {member.milestonesAchieved.length}

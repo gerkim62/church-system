@@ -50,6 +50,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import z from 'zod'
 import { MemberMilestonesModal } from '@/features/members/components/member-milestones-modal'
+import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/members')({
   component: MembersPage,
@@ -78,7 +79,7 @@ function MembersPage() {
     (member) =>
       (member.name && member.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (member.email && member.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      (member.phone && member.phone.includes(searchQuery))
+      (member.phoneNumber && member.phoneNumber.includes(searchQuery))
   )
 
   // Format dates
@@ -205,18 +206,18 @@ function MembersPage() {
                               {/* Milestones badge - Hidden on mobile, shown only in badge on desktop */}
                               <Badge
                                 variant={
-                                  member.milestonesCount > 0
+                                  member.milestonesAchieved.length > 0
                                     ? 'default'
                                     : 'secondary'
                                 }
                                 className={`shrink-0 gap-1 mr-2 hidden ${
-                                  member.milestonesCount > 0
+                                  member.milestonesAchieved.length > 0
                                     ? 'bg-gradient-to-r from-amber-500 to-orange-500'
                                     : ''
                                 }`}
                               >
                                 <Award className="h-3 w-3" />
-                                {member.milestonesCount}
+                                {member.milestonesAchieved.length}
                               </Badge>
                             </div>
                           </AccordionTrigger>
@@ -247,8 +248,8 @@ function MembersPage() {
                                   <p className="text-xs text-muted-foreground">
                                     Phone
                                   </p>
-                                  <p className="text-sm text-foreground">
-                                    {member.phone || 'Not provided'}
+                                  <p className={cn("text-sm text-foreground", member.phoneNumber ? "" : "text-muted-foreground")}>
+                                    {member.phoneNumber || 'Not provided'}
                                   </p>
                                 </div>
                               </div>
@@ -286,7 +287,7 @@ function MembersPage() {
                                       Milestones
                                     </p>
                                     <p className="text-sm font-semibold text-foreground">
-                                      {member.milestonesCount} achieved
+                                      {member.milestonesAchieved.length} achieved
                                     </p>
                                   </div>
                                   <ChevronRight className="h-5 w-5 text-amber-500" />
@@ -380,10 +381,10 @@ function MembersPage() {
 
                             {/* Phone */}
                             <TableCell>
-                              {member.phone ? (
+                              {member.phoneNumber ? (
                                 <div className="flex items-center gap-2 text-muted-foreground">
                                   <Phone className="h-3.5 w-3.5 shrink-0" />
-                                  <span>{member.phone}</span>
+                                  <span>{member.phoneNumber}</span>
                                 </div>
                               ) : (
                                 <span className="text-muted-foreground/50">
@@ -409,25 +410,25 @@ function MembersPage() {
                                     >
                                       <Badge
                                         variant={
-                                          member.milestonesCount > 0
+                                          member.milestonesAchieved.length > 0
                                             ? 'default'
                                             : 'secondary'
                                         }
-                                        className={`cursor-pointer gap-1.5 transition-all hover:scale-105 ${member.milestonesCount > 0
+                                        className={`cursor-pointer gap-1.5 transition-all hover:scale-105 ${member.milestonesAchieved.length > 0
                                             ? 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-sm'
                                             : ''
                                           }`}
                                       >
                                         <Award className="h-3 w-3" />
-                                        {member.milestonesCount}
+                                        {member.milestonesAchieved.length}
                                       </Badge>
                                     </div>
                                   </TooltipTrigger>
                                 </MemberMilestonesModal>
                                 <TooltipContent>
                                   <p>
-                                    {member.milestonesCount > 0
-                                      ? `View ${member.milestonesCount} milestone${member.milestonesCount > 1 ? 's' : ''}`
+                                    {member.milestonesAchieved.length > 0
+                                      ? `View ${member.milestonesAchieved.length} milestone${member.milestonesAchieved.length > 1 ? 's' : ''}`
                                       : 'No milestones yet'}
                                   </p>
                                 </TooltipContent>

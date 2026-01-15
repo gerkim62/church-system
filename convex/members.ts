@@ -32,6 +32,7 @@ export const list = query({
       const user = await authComponent.getAnyUserById(
         ctx,
         member.organizationMemberId,
+
       )
       if (!user) continue
 

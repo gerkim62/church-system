@@ -176,8 +176,8 @@ function MembersPage() {
                     <Accordion type="single" collapsible className="w-full">
                       {filteredMembers.map((member) => (
                         <AccordionItem
-                          key={member._id}
-                          value={member._id}
+                          key={member.id}
+                          value={member.id}
                           className="border-border/50"
                         >
                           <AccordionTrigger className="px-4 hover:no-underline hover:bg-muted/40 [&[data-state=open]]:bg-muted/30">
@@ -196,10 +196,10 @@ function MembersPage() {
                               {/* Name and email */}
                               <div className="flex-1 min-w-0 text-left">
                                 <p className="font-medium text-foreground truncate">
-                                  {member.name || 'Unknown Member'}
+                                  {member.name}
                                 </p>
                                 <p className="text-sm text-muted-foreground truncate">
-                                  {member.email || 'No email'}
+                                  {member.email}
                                 </p>
                               </div>
 
@@ -271,8 +271,8 @@ function MembersPage() {
 
                               {/* Milestones Button */}
                               <MemberMilestonesModal
-                                memberId={member._id}
-                                memberName={member.name || 'Unknown Member'}
+                                memberId={member.id}
+                                memberName={member.name}
                                 hideOnDesktop
                               >
                                 <button 
@@ -301,7 +301,7 @@ function MembersPage() {
                                   size="sm"
                                   className="flex-1 gap-2"
                                   onClick={() =>
-                                    handleEditMember(member._id, member.name || 'Unknown Member')
+                                    handleEditMember(member.id, member.name)
                                   }
                                 >
                                   <Pencil className="h-4 w-4" />
@@ -312,7 +312,7 @@ function MembersPage() {
                                   size="sm"
                                   className="flex-1 gap-2 text-destructive hover:text-destructive hover:bg-destructive/10 border-destructive/30"
                                   onClick={() =>
-                                    handleDeleteMember(member._id, member.name || 'Unknown Member')
+                                    handleDeleteMember(member.id, member.name)
                                   }
                                 >
                                   <Trash2 className="h-4 w-4" />
@@ -348,7 +348,7 @@ function MembersPage() {
                       <TableBody>
                         {filteredMembers.map((member) => (
                           <TableRow
-                            key={member._id}
+                            key={member.id}
                             className="group cursor-pointer transition-colors hover:bg-muted/40"
                           >
                             {/* Name */}
@@ -364,7 +364,7 @@ function MembersPage() {
                                     : '??'}
                                 </div>
                                 <span className="group-hover:text-primary transition-colors">
-                                  {member.name || 'Unknown Member'}
+                                  {member.name}
                                 </span>
                               </div>
                             </TableCell>
@@ -374,7 +374,7 @@ function MembersPage() {
                               <div className="flex items-center gap-2 text-muted-foreground">
                                 <Mail className="h-3.5 w-3.5 shrink-0" />
                                 <span className="max-w-[200px] truncate">
-                                  {member.email || 'No email'}
+                                  {member.email}
                                 </span>
                               </div>
                             </TableCell>
@@ -397,8 +397,8 @@ function MembersPage() {
                             <TableCell className="text-center">
                               <Tooltip>
                                 <MemberMilestonesModal
-                                  memberId={member._id}
-                                  memberName={member.name || 'Unknown Member'}
+                                  memberId={member.id}
+                                  memberName={member.name}
                                   hideOnMobile
                                 >
                                   <TooltipTrigger asChild>
@@ -457,7 +457,7 @@ function MembersPage() {
                                 <DropdownMenuContent align="end" className="w-40">
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleEditMember(member._id, member.name || 'Unknown Member')
+                                      handleEditMember(member.id, member.name)
                                     }
                                     className="gap-2 cursor-pointer"
                                   >
@@ -467,7 +467,7 @@ function MembersPage() {
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      handleDeleteMember(member._id, member.name || 'Unknown Member')
+                                      handleDeleteMember(member.id, member.name)
                                     }
                                     className="gap-2 cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
                                   >

@@ -12,7 +12,10 @@ export default defineSchema({
   churchMembers: defineTable({
     organizationId: v.id('organizations'),
     organizationMemberId: v.id('organizationMembers'),
-    isVisitor: v.boolean(),
+    name:v.string(),
     milestonesAchieved: v.array(v.id('milestones')),
-  }),
+  }).searchIndex("byName", {
+   searchField: "name",
+   filterFields: ["organizationId"],
+  })
 })

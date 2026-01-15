@@ -8,12 +8,13 @@ export const auth = createAuth({})
 
 // Public query to get member details by memberId
 export const getMember = query({
-  args: { memberId: v.string() },
+  args: { memberId: v.id('member'), organizationId: v.id('organizations') },
   async handler(ctx, args) {
     // Get member from the component's member table
     const member = await ctx.db
       .query('member')
       .filter((q) => q.eq(q.field('_id'), args.memberId))
+      .filter((q) => q.eq(q.field('organizationId'), args.organizationId))
       .first()
 
     if (!member) {
@@ -31,10 +32,15 @@ export const getMember = query({
     }
 
     return {
-      name: user.name,
       email: user.email,
-      phone: user.phoneNumber ?? null,
+      phoneNumber: user.phoneNumber ?? null,
+      role: member.role,
     }
   },
+  returns: v.nullable(v.object({
+    email: v.string(),
+    phoneNumber: v.union(v.string(), v.null()),
+    role: v.string(),
+  })),
 })
 

@@ -1504,8 +1504,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
       getMember: FunctionReference<
         "query",
         "internal",
-        { memberId: string },
-        any,
+        { memberId: string; organizationId: string },
+        { email: string; phoneNumber: string | null; role: string } | null,
         Name
       >;
     };

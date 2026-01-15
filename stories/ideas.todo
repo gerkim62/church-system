@@ -1,2 +1,3 @@
-☐ strictest ts rules
+☐ strictest ts rules https://www.npmjs.com/package/@tsconfig/strictest
 ☐ eslint config for no await in loop, no any, no as, no !
+☐ add ts-reset https://github.com/mattpocock/ts-reset

@@ -1,37 +1,39 @@
 import { useLayoutEffect } from 'react'
-import { useNavigate, useSearch } from '@tanstack/react-router'
+import { useRouter, useSearch } from '@tanstack/react-router'
 
 interface RedirectErrorProps {
   url: string
+  resetErrorBoundary?: () => void
 }
 
 /**
  * Handles redirect errors by immediately navigating to the specified URL.
  * Preserves the current search query parameters during navigation.
  * 
- * Uses useLayoutEffect instead of useEffect to ensure synchronous navigation
- * before browser paint, following React best practices for immediate actions
- * that are consequences of rendering (not external system synchronization).
+ * Uses useRouter to access the router instance and perform immediate navigation.
+ * Resets the error boundary after navigation to ensure proper rendering.
  * 
  * @see https://react.dev/learn/you-might-not-need-an-effect
  */
-export function RedirectError({ url }: RedirectErrorProps) {
-  const navigate = useNavigate()
+export function RedirectError({ url, resetErrorBoundary }: RedirectErrorProps) {
+  const router = useRouter()
   const currentSearch = useSearch({ strict: false })
 
-  // This is event-specific logic (error occurred → redirect immediately)
-  // not external synchronization, so useLayoutEffect is appropriate
+  // Perform immediate navigation using router.navigate
+  // Use replace: true to replace current entry and clear error boundary
   useLayoutEffect(() => {
-    void navigate({ 
+    void router.navigate({
       to: url,
       search: {
         ...currentSearch,
-        "redirect-url": currentSearch["redirect-url"] ?? window.location.pathname
-      } // Preserve existing search parameters
+        'redirect-url': currentSearch['redirect-url'] ?? window.location.pathname,
+      },
+      // replace: true, // Replace current entry to clear error boundary state
     })
-  }, [navigate, url, currentSearch])
+    
+    // Reset error boundary after navigation
+    resetErrorBoundary?.()
+  }, [router, url, currentSearch, resetErrorBoundary])
 
-  return <p>
-    Redirecting...
-  </p>
+  return null
 }

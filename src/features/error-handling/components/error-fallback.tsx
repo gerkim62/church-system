@@ -55,7 +55,7 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
       console.error('Redirect error missing URL')
       return <GenericError error={error} resetErrorBoundary={resetErrorBoundary} />
     }
-    return <RedirectError url={url} />
+    return <RedirectError url={url} resetErrorBoundary={resetErrorBoundary} />
   }
 
   // TypeScript exhaustiveness check - this will error if we miss a case

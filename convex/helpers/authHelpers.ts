@@ -53,14 +53,14 @@ export async function assertPermitted({
 }
 
 export const getServerSession = async (authCtx: AuthContext) => {
-  console.log('getServerSession called')
+  // console.log('getServerSession called')
   try {
     const { auth, headers } = authCtx
 
     const result = await auth.api.getSession({
       headers,
     })
-    console.log('getServerSession result:', result)
+    // console.log('getServerSession result:', result)
     return result
   } catch (error) {
     console.error('Error getting server session:', error)

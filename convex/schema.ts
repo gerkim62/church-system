@@ -6,12 +6,12 @@ export default defineSchema({
     title: v.string(),
     description: v.optional(v.string()),
 
-    organizationId: v.id('organizations'),
+    organizationId: v.string(),
   }),
 
   churchMembers: defineTable({
-    organizationId: v.id('organizations'),
-    organizationMemberId: v.id('organizationMembers'),
+    organizationId: v.string(),
+    organizationMemberId: v.string(),
     name: v.string(),
     milestonesAchieved: v.array(v.id('milestones')),
   }).searchIndex('byName', {

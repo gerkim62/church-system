@@ -9,6 +9,7 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as churches from "../churches.js";
 import type * as env from "../env.js";
 import type * as helpers_authHelpers from "../helpers/authHelpers.js";
 import type * as helpers_errorHelpers from "../helpers/errorHelpers.js";
@@ -23,6 +24,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  churches: typeof churches;
   env: typeof env;
   "helpers/authHelpers": typeof helpers_authHelpers;
   "helpers/errorHelpers": typeof helpers_errorHelpers;

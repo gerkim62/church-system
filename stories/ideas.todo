@@ -1,3 +1,6 @@
-☐ strictest ts rules https://www.npmjs.com/package/@tsconfig/strictest
-☐ eslint config for no await in loop, no any, no as, no !
-☐ add ts-reset https://github.com/mattpocock/ts-reset
+✔ strictest ts rules https://www.npmjs.com/package/@tsconfig/strictest @done(26-01-15 21:42)
+✔ eslint config for no await in loop, no any, no as, no ! @done(26-01-15 21:42)
+✔ add ts-reset https://github.com/mattpocock/ts-reset @done(26-01-15 21:42)
+
+1/14/2026 9:43pm
+☐ dont render sensitive error info on client

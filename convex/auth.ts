@@ -2,12 +2,12 @@ import {  createClient } from '@convex-dev/better-auth'
 import { convex, crossDomain } from '@convex-dev/better-auth/plugins'
 import {  betterAuth } from 'better-auth/minimal'
 import { organization, phoneNumber } from 'better-auth/plugins'
-import { components } from './_generated/api'
+import { components, internal } from './_generated/api'
 import { query } from './_generated/server'
 import authConfig from './auth.config'
 import { env } from './env'
 import authSchema from './betterAuth/schema'
-import type { DataModel } from './_generated/dataModel'
+import type { DataModel, Id } from './_generated/dataModel'
 import type {BetterAuthOptions} from 'better-auth/minimal';
 import type {GenericCtx} from '@convex-dev/better-auth';
 
@@ -42,10 +42,31 @@ export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
       // The Convex plugin is required for Convex compatibility
       convex({ authConfig }),
 
-      organization({}),
+      organization({
+        organizationHooks: {
+          afterCreateOrganization: async ({ organization: org, member, user }) => {
+            console.log("afterCreateOrganization")
+            console.log(org, member, user)
+            // Create churchMember record for the org creator
+            // We use runMutation because hooks run in action context without direct db access
+            if ('runMutation' in ctx) {
+              console.log("runMutation")
+              // Better Auth types these as plain strings, but they are valid Convex IDs
+              // created by the Convex adapter - the type assertion is safe here
+              await ctx.runMutation(internal.churches.createChurchMemberInternal, {
+                organizationId: org.id,
+                organizationMemberId: member.id,
+                name: user.name,
+              })
+            }else{
+              console.log("runMutation not found in ctx")
+            }
+          },
+        },
+      }),
 
       phoneNumber({
-        sendOTP(data, ctx) {
+        sendOTP(data, _ctx) {
           // TODO: Implement your OTP sending logic here.
           // For example, integrate with Twilio or another SMS service.
           console.log(

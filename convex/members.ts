@@ -17,14 +17,16 @@ export const list = query({
     } = await assertActiveOrganization(await authComponent.getAuth(createAuth, ctx))
     // Fetch church members with pagination
     const searchTerm = args.search ?? ''
+    console.log("searchTerm", searchTerm)
+    console.log("organizationId", organizationId)
     const paginatedResults = await ctx.db
       .query('churchMembers')
       .withSearchIndex('byName', (q) =>
-        q.search('name', searchTerm).eq('organizationId',
-          // @ts-expect-error Convex types are not compatible with Better Auth types
-           organizationId),
+        q.search('name', searchTerm).eq('organizationId', organizationId),
       )
       .paginate(args.paginationOpts)
+
+    console.log("paginatedResults", paginatedResults)
 
     const memberDetailsPromises = paginatedResults.page.map((churchMember) =>
       ctx.runQuery(components.betterAuth.auth.getMember, {

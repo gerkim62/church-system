@@ -24,7 +24,10 @@ export function RedirectError({ url }: RedirectErrorProps) {
   useLayoutEffect(() => {
     void navigate({ 
       to: url,
-      search: currentSearch // Preserve existing search parameters
+      search: {
+        ...currentSearch,
+        "redirect-url": currentSearch["redirect-url"] ?? window.location.pathname
+      } // Preserve existing search parameters
     })
   }, [navigate, url, currentSearch])
 

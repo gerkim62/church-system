@@ -2,6 +2,7 @@ import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { components } from './_generated/api'
 import { query } from './_generated/server'
+import { authComponent, createAuth } from './auth'
 
 export const list = query({
   args: {
@@ -9,6 +10,8 @@ export const list = query({
     search: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const { auth } = await authComponent.getAuth( createAuth, ctx)
+    
     const organizationId = '' as any
     // Fetch church members with pagination
     const searchTerm = args.search ?? ""

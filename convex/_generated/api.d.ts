@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as auth_helpers from "../helpers/auth-helpers.js";
 import type * as auth from "../auth.js";
 import type * as env from "../env.js";
 import type * as http from "../http.js";
@@ -20,6 +21,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  "auth-helpers": typeof auth_helpers;
   auth: typeof auth;
   env: typeof env;
   http: typeof http;

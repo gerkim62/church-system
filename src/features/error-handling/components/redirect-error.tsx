@@ -31,5 +31,7 @@ export function RedirectError({ url }: RedirectErrorProps) {
     })
   }, [navigate, url, currentSearch])
 
-  return null
+  return <p>
+    Redirecting...
+  </p>
 }

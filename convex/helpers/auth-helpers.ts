@@ -23,10 +23,8 @@ export async function assertAuthenticated(authCtx: AuthContext) {
 }
 
 export async function assertActiveOrganization(authCtx: AuthContext) {
-  const [org] = await Promise.all([
-    getActiveMember(authCtx),
-    assertAuthenticated(authCtx),
-  ]);
+  await assertAuthenticated(authCtx); // First: ensure authenticated
+  const org = await getActiveMember(authCtx); // Then: get active member
 
   return org ?? handleNoActiveOrg(authCtx);
 }

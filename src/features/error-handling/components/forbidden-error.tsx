@@ -7,7 +7,7 @@ export function ForbiddenError({ resetErrorBoundary }: { resetErrorBoundary: () 
   const router = useRouter()
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center p-4">
+    <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-card p-8 text-center shadow-lg">
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20">
           <Lock className="h-8 w-8 text-red-600 dark:text-red-500" />

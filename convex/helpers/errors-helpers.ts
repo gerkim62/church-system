@@ -5,7 +5,7 @@ export const ERROR_CODES = {
   forbidden: 'FORBIDDEN',
   notFound: 'NOT_FOUND',
   redirect: 'REDIRECT',
-}
+} as const
 
 export function forbidden() {
   return new ConvexError(ERROR_CODES.forbidden)

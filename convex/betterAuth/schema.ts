@@ -3,8 +3,12 @@ import { tables } from './generatedSchema'
 
 const schema = defineSchema({
   ...tables,
-  // Spread the generated schema and add a custom index
+  // Add custom indexes that persist across schema regeneration
   user: tables.user,
+  member: tables.member.index('organizationId_userId', [
+    'organizationId',
+    'userId',
+  ]),
 })
 
 export default schema

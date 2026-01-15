@@ -14,6 +14,7 @@ import { Route as DemoErrorBoundaryRouteImport } from './routes/demo/error-bound
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
 import { Route as DemoAuthRouteImport } from './routes/demo/auth'
 import { Route as AuthedMembersRouteImport } from './routes/_authed/members'
+import { Route as AuthedObRegisterChurchRouteImport } from './routes/_authed/ob/register-church'
 import { Route as AuthedObNoChurchRouteImport } from './routes/_authed/ob/no-church'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const AuthedMembersRoute = AuthedMembersRouteImport.update({
   path: '/members',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedObRegisterChurchRoute = AuthedObRegisterChurchRouteImport.update({
+  id: '/_authed/ob/register-church',
+  path: '/ob/register-church',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthedObNoChurchRoute = AuthedObNoChurchRouteImport.update({
   id: '/_authed/ob/no-church',
   path: '/ob/no-church',
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
   '/ob/no-church': typeof AuthedObNoChurchRoute
+  '/ob/register-church': typeof AuthedObRegisterChurchRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
   '/ob/no-church': typeof AuthedObNoChurchRoute
+  '/ob/register-church': typeof AuthedObRegisterChurchRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,6 +79,7 @@ export interface FileRoutesById {
   '/demo/convex': typeof DemoConvexRoute
   '/demo/error-boundary': typeof DemoErrorBoundaryRoute
   '/_authed/ob/no-church': typeof AuthedObNoChurchRoute
+  '/_authed/ob/register-church': typeof AuthedObRegisterChurchRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -81,6 +90,7 @@ export interface FileRouteTypes {
     | '/demo/convex'
     | '/demo/error-boundary'
     | '/ob/no-church'
+    | '/ob/register-church'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -89,6 +99,7 @@ export interface FileRouteTypes {
     | '/demo/convex'
     | '/demo/error-boundary'
     | '/ob/no-church'
+    | '/ob/register-church'
   id:
     | '__root__'
     | '/'
@@ -97,6 +108,7 @@ export interface FileRouteTypes {
     | '/demo/convex'
     | '/demo/error-boundary'
     | '/_authed/ob/no-church'
+    | '/_authed/ob/register-church'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -106,6 +118,7 @@ export interface RootRouteChildren {
   DemoConvexRoute: typeof DemoConvexRoute
   DemoErrorBoundaryRoute: typeof DemoErrorBoundaryRoute
   AuthedObNoChurchRoute: typeof AuthedObNoChurchRoute
+  AuthedObRegisterChurchRoute: typeof AuthedObRegisterChurchRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -145,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedMembersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/ob/register-church': {
+      id: '/_authed/ob/register-church'
+      path: '/ob/register-church'
+      fullPath: '/ob/register-church'
+      preLoaderRoute: typeof AuthedObRegisterChurchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authed/ob/no-church': {
       id: '/_authed/ob/no-church'
       path: '/ob/no-church'
@@ -162,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoConvexRoute: DemoConvexRoute,
   DemoErrorBoundaryRoute: DemoErrorBoundaryRoute,
   AuthedObNoChurchRoute: AuthedObNoChurchRoute,
+  AuthedObRegisterChurchRoute: AuthedObRegisterChurchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

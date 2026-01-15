@@ -1,7 +1,6 @@
 import { paginationOptsValidator } from 'convex/server'
 import { v } from 'convex/values'
 import { components } from './_generated/api'
-import { Id } from './_generated/dataModel'
 import { query } from './_generated/server'
 
 export const list = query({
@@ -20,34 +19,28 @@ export const list = query({
       )
       .paginate(args.paginationOpts)
 
-    const fullUsers: {
-      email: string
-      memberSince: number
-      phoneNumber: string | null
-      role: string,
-      milestonesAchieved: Id<'milestones'>[],
-      name: string,
-      id: Id<'churchMembers'>,
-    }[] = []
+    const memberDetailsPromises = paginatedResults.page.map((churchMember) =>
+      ctx.runQuery(components.betterAuth.auth.getMember, {
+        memberId: churchMember.organizationMemberId,
+        organizationId: organizationId,
+      })
+    )
 
-    for (const churchMember of paginatedResults.page) {
-      const memberDetails = await ctx.runQuery(
-        components.betterAuth.auth.getMember,
-        {
-          memberId: churchMember.organizationMemberId,
-          organizationId: organizationId,
-        },
-      )
-      if (memberDetails) {
-        fullUsers.push({
+    const memberDetailsResults = await Promise.all(memberDetailsPromises)
+
+    const fullUsers = paginatedResults.page
+      .map((churchMember, index) => {
+        const memberDetails = memberDetailsResults[index]
+        if (!memberDetails) return null
+        return {
           ...memberDetails,
           milestonesAchieved: churchMember.milestonesAchieved,
           name: churchMember.name,
           id: churchMember._id,
           memberSince: churchMember._creationTime,
-        })
-      }
-    }
+        }
+      })
+      .filter(Boolean)
 
     return {
       ...paginatedResults,

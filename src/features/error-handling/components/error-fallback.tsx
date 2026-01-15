@@ -1,5 +1,5 @@
 import { type FallbackProps } from 'react-error-boundary'
-import { ERROR_CODES } from '~/convex/helpers/errors-helpers'
+import { ERROR_CODES } from '~/convex/helpers/errorHelpers'
 import { parseConvexError, type ErrorCode } from '../utils/parse-convex-error'
 import { UnauthorizedError } from './unauthorized-error'
 import { ForbiddenError } from './forbidden-error'

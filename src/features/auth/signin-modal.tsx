@@ -25,7 +25,13 @@ export default function SignInModal({ children }: SignInModalProps) {
     openValue: 'open',
   })
 
-  const { redirectUrl } = useRedirectUrl()
+  const pathname = window.location.pathname
+
+  const { redirectUrl } = useRedirectUrl(
+    {
+      fallbackUrl: pathname,
+    }
+  )
 
   const [isLoading, setIsLoading] = React.useState(false)
 

@@ -1,5 +1,5 @@
 import { ConvexError } from 'convex/values'
-import { ERROR_CODES } from '~/convex/helpers/errors-helpers'
+import { ERROR_CODES } from '~/convex/helpers/errorHelpers'
 
 // Create a type from ERROR_CODES values for exhaustiveness checking
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES]

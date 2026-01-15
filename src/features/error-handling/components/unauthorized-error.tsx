@@ -1,6 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Button } from '@/components/ui/button'
 import { LogIn, Home } from 'lucide-react'
+import SignInModal from '@/features/auth/signin-modal'
 
 export function UnauthorizedError() {
   const navigate = useNavigate()
@@ -20,22 +21,12 @@ export function UnauthorizedError() {
           </p>
         </div>
         <div className="flex flex-col gap-3">
-          <Button
-            onClick={() => {
-              const currentPath = window.location.pathname
-              void navigate({
-                to: '/',
-                search: {
-                  'sign-in-modal': 'open',
-                  'redirect-url': currentPath,
-                },
-              })
-            }}
-            className="w-full"
-          >
-            <LogIn className="mr-2 h-4 w-4" />
-            Sign In
-          </Button>
+          <SignInModal>
+            <Button className="w-full">
+              <LogIn className="mr-2 h-4 w-4" />
+              Sign In
+            </Button>
+          </SignInModal>
           <Button
             variant="outline"
             onClick={() => navigate({ to: '/' })}

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ConvexError } from 'convex/values'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ERROR_CODES } from '~/convex/helpers/errors-helpers'
+import { ERROR_CODES } from '~/convex/helpers/errorHelpers'
 
 function ErrorBoundaryDemo() {
   const [shouldThrow, setShouldThrow] = useState<string | null>(null)

@@ -1,5 +1,5 @@
 import { APIError } from 'better-auth'
-import { forbidden, redirect, unauthorized } from './errors-helpers'
+import { forbidden, redirect, unauthorized } from './errorHelpers'
 import type { Statements } from 'better-auth/plugins'
 import type { authComponent, createAuth } from '../auth'
 
@@ -53,12 +53,14 @@ export async function assertPermitted({
 }
 
 export const getServerSession = async (authCtx: AuthContext) => {
+  console.log('getServerSession called')
   try {
     const { auth, headers } = authCtx
 
     const result = await auth.api.getSession({
       headers,
     })
+    console.log('getServerSession result:', result)
     return result
   } catch (error) {
     console.error('Error getting server session:', error)
@@ -115,7 +117,7 @@ export async function handleNoActiveOrg(authCtx: AuthContext) {
   // No organizations - redirect to create one
   if (orgs.length === 0) {
     console.log('No organizations found, redirecting to new hire shop modal')
-    redirect(`/ob/create-organization`)
+   throw redirect(`/ob/create-organization`)
   }
 
   // Single organization - automatically set it as active and refetch
@@ -138,7 +140,7 @@ export async function handleNoActiveOrg(authCtx: AuthContext) {
   }
 
   // Multiple organizations - let user choose
-  redirect(`/ob/select-organization`)
+ throw redirect(`/ob/select-organization`)
 }
 
 // USAGE EXAMPLE:

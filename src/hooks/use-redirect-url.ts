@@ -2,12 +2,12 @@ import { useRouter, useSearch } from '@tanstack/react-router'
 
 function useRedirectUrl({
   // TODO:change this default when we have a better default
-  defaultUrl = '/app',
+  fallbackUrl = '/app',
 }: {
-  defaultUrl?: string
-} = {}) {
+  fallbackUrl?: string
+}) {
   const search = useSearch({ strict: false })
-  const redirectUrl = search['redirect-url'] ?? defaultUrl
+  const redirectUrl = search['redirect-url'] ?? fallbackUrl
 
   const router = useRouter()
   const goToRedirectUrl = () =>

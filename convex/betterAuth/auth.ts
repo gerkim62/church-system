@@ -8,7 +8,7 @@ export const auth = createAuth({})
 
 // Public query to get member details by memberId
 export const getMember = query({
-  args: { memberId: v.id('member'), organizationId: v.id('organizations') },
+  args: { memberId: v.id('member'), organizationId: v.id('organization') },
   async handler(ctx, args) {
     // Get member from the component's member table
     const member = await ctx.db

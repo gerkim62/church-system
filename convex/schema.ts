@@ -1,6 +1,7 @@
 import { defineSchema, defineTable } from 'convex/server'
 import { v } from 'convex/values'
 
+// Define the schema for the church system
 export default defineSchema({
   milestones: defineTable({
     title: v.string(),

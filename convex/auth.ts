@@ -7,7 +7,7 @@ import { query } from './_generated/server'
 import authConfig from './auth.config'
 import { env } from './env'
 import authSchema from './betterAuth/schema'
-import type { DataModel, Id } from './_generated/dataModel'
+import type { DataModel } from './_generated/dataModel'
 import type {BetterAuthOptions} from 'better-auth/minimal';
 import type {GenericCtx} from '@convex-dev/better-auth';
 
@@ -27,6 +27,7 @@ export const authComponent = createClient<DataModel, typeof authSchema>(
 export const createAuthOptions = (ctx: GenericCtx<DataModel>) => {
   return {
     trustedOrigins: [siteUrl],
+    secret: env.BETTER_AUTH_SECRET,
     database: authComponent.adapter(ctx),
 
     socialProviders: {

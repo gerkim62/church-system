@@ -1,21 +1,21 @@
-
-import { useRouter, useSearch } from "@tanstack/react-router";
+import { useRouter, useSearch } from '@tanstack/react-router'
 
 function useRedirectUrl({
   // TODO:change this default when we have a better default
-  defaultUrl = "/app",
+  defaultUrl = '/app',
 }: {
-  defaultUrl?: string;
+  defaultUrl?: string
 } = {}) {
-  const search = useSearch({ strict:false });
-  const redirectUrl = search["redirect-url"] ?? defaultUrl;
+  const search = useSearch({ strict: false })
+  const redirectUrl = search['redirect-url'] ?? defaultUrl
 
-  const router = useRouter();
-  const goToRedirectUrl = () => router.navigate({
-    to: redirectUrl,
-  });
+  const router = useRouter()
+  const goToRedirectUrl = () =>
+    router.navigate({
+      to: redirectUrl,
+    })
 
-  return { redirectUrl, goToRedirectUrl };
+  return { redirectUrl, goToRedirectUrl }
 }
 
-export default useRedirectUrl;
+export default useRedirectUrl

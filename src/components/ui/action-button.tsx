@@ -1,23 +1,24 @@
-import { type ComponentProps, type ReactNode, useTransition } from "react"
-import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
-import { LoadingSwap } from "@/components/ui/loading-swap"
+import {   useTransition } from 'react'
+import { toast } from 'sonner'
+import type {ComponentProps, ReactNode} from 'react';
+import { Button } from '@/components/ui/button'
+import { LoadingSwap } from '@/components/ui/loading-swap'
 import {
   AlertDialog,
-  AlertDialogDescription,
-  AlertDialogTitle,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 
 export function ActionButton({
   action,
   requireAreYouSure = false,
-  areYouSureDescription = "This action cannot be undone.",
+  areYouSureDescription = 'This action cannot be undone.',
   ...props
 }: ComponentProps<typeof Button> & {
   action: () => Promise<{ error: boolean; message?: string }>
@@ -29,7 +30,7 @@ export function ActionButton({
   function performAction() {
     startTransition(async () => {
       const data = await action()
-      if (data.error) toast.error(data.message ?? "Error")
+      if (data.error) toast.error(data.message ?? 'Error')
     })
   }
 
@@ -61,7 +62,7 @@ export function ActionButton({
     <Button
       {...props}
       disabled={props.disabled ?? isLoading}
-      onClick={e => {
+      onClick={(e) => {
         performAction()
         props.onClick?.(e)
       }}

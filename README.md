@@ -98,6 +98,7 @@ pnpm dev
 This template includes a complete authentication system:
 
 ### Features
+
 - Google OAuth sign-in
 - Session management
 - Protected routes
@@ -109,6 +110,7 @@ This template includes a complete authentication system:
 The authentication is already set up and ready to use. Visit `/demo/auth` to see the authentication flow in action.
 
 Key files:
+
 - `src/lib/auth-client.ts` - Client-side auth configuration
 - `convex/auth.ts` - Server-side auth setup (using T3 Env)
 - `convex/env.ts` - Server environment variables with validation
@@ -222,24 +224,25 @@ Add new functions in the `convex/` directory with type-safe environment variable
 
 ```typescript
 // convex/myFunction.ts
-import { query } from "./_generated/server";
-import { env } from "./env"; // Import validated env vars
+import { query } from './_generated/server'
+import { env } from './env' // Import validated env vars
 
 export const myQuery = query({
   args: {},
   handler: async (ctx) => {
     // Access environment variables with full type safety
-    const siteUrl = env.SITE_URL;
-    
+    const siteUrl = env.SITE_URL
+
     // Your function logic here
-    return { message: "Hello World!", siteUrl };
+    return { message: 'Hello World!', siteUrl }
   },
-});
+})
 ```
 
 To add new environment variables to Convex:
 
 1. Update `convex/env.ts`:
+
 ```typescript
 export const env = createEnv({
   server: {
@@ -248,18 +251,20 @@ export const env = createEnv({
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-});
+})
 ```
 
 2. Set the value:
+
 ```bash
 npx convex env set MY_NEW_API_KEY "your-api-key"
 ```
 
 3. Use it in your functions:
+
 ```typescript
-import { env } from "./env";
-const apiKey = env.MY_NEW_API_KEY; // ✅ Fully typed!
+import { env } from './env'
+const apiKey = env.MY_NEW_API_KEY // ✅ Fully typed!
 ```
 
 ### Environment Variables
@@ -290,8 +295,8 @@ export const env = createEnv({
 })
 
 // Usage in React components
-import { env } from "@/env";
-console.log(env.VITE_CONVEX_URL);
+import { env } from '@/env'
+console.log(env.VITE_CONVEX_URL)
 ```
 
 #### Backend Environment Variables (convex/env.ts)
@@ -300,8 +305,8 @@ Used in your Convex functions with full type safety and validation:
 
 ```typescript
 // convex/env.ts
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const env = createEnv({
   server: {
@@ -311,20 +316,21 @@ export const env = createEnv({
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
-});
+})
 
 // Usage in Convex functions
-import { env } from "./env";
+import { env } from './env'
 
 export const myQuery = query({
   handler: async (ctx) => {
-    const apiKey = env.GOOGLE_CLIENT_ID; // ✅ Fully typed!
+    const apiKey = env.GOOGLE_CLIENT_ID // ✅ Fully typed!
     // ...
-  }
-});
+  },
+})
 ```
 
 **Benefits:**
+
 - ✅ Full TypeScript autocomplete
 - ✅ Runtime validation with Zod
 - ✅ Clear error messages if variables are missing

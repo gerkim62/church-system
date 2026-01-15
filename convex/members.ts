@@ -10,15 +10,15 @@ export const list = query({
     search: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const { auth } = await authComponent.getAuth( createAuth, ctx)
-    
+    const { auth } = await authComponent.getAuth(createAuth, ctx)
+
     const organizationId = '' as any
     // Fetch church members with pagination
-    const searchTerm = args.search ?? ""
+    const searchTerm = args.search ?? ''
     const paginatedResults = await ctx.db
       .query('churchMembers')
-      .withSearchIndex("byName", (q) =>
-        q.search("name", searchTerm).eq("organizationId", organizationId)
+      .withSearchIndex('byName', (q) =>
+        q.search('name', searchTerm).eq('organizationId', organizationId),
       )
       .paginate(args.paginationOpts)
 
@@ -26,7 +26,7 @@ export const list = query({
       ctx.runQuery(components.betterAuth.auth.getMember, {
         memberId: churchMember.organizationMemberId,
         organizationId: organizationId,
-      })
+      }),
     )
 
     const memberDetailsResults = await Promise.all(memberDetailsPromises)

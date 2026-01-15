@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MembersRouteImport } from './routes/members'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DemoErrorBoundaryRouteImport } from './routes/demo/error-boundary'
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
 import { Route as DemoAuthRouteImport } from './routes/demo/auth'
 
@@ -22,6 +23,11 @@ const MembersRoute = MembersRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoErrorBoundaryRoute = DemoErrorBoundaryRouteImport.update({
+  id: '/demo/error-boundary',
+  path: '/demo/error-boundary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoConvexRoute = DemoConvexRouteImport.update({
@@ -40,12 +46,14 @@ export interface FileRoutesByFullPath {
   '/members': typeof MembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/error-boundary': typeof DemoErrorBoundaryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/members': typeof MembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/error-boundary': typeof DemoErrorBoundaryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,25 @@ export interface FileRoutesById {
   '/members': typeof MembersRoute
   '/demo/auth': typeof DemoAuthRoute
   '/demo/convex': typeof DemoConvexRoute
+  '/demo/error-boundary': typeof DemoErrorBoundaryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/members' | '/demo/auth' | '/demo/convex'
+  fullPaths:
+    | '/'
+    | '/members'
+    | '/demo/auth'
+    | '/demo/convex'
+    | '/demo/error-boundary'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/members' | '/demo/auth' | '/demo/convex'
-  id: '__root__' | '/' | '/members' | '/demo/auth' | '/demo/convex'
+  to: '/' | '/members' | '/demo/auth' | '/demo/convex' | '/demo/error-boundary'
+  id:
+    | '__root__'
+    | '/'
+    | '/members'
+    | '/demo/auth'
+    | '/demo/convex'
+    | '/demo/error-boundary'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +87,7 @@ export interface RootRouteChildren {
   MembersRoute: typeof MembersRoute
   DemoAuthRoute: typeof DemoAuthRoute
   DemoConvexRoute: typeof DemoConvexRoute
+  DemoErrorBoundaryRoute: typeof DemoErrorBoundaryRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -83,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/error-boundary': {
+      id: '/demo/error-boundary'
+      path: '/demo/error-boundary'
+      fullPath: '/demo/error-boundary'
+      preLoaderRoute: typeof DemoErrorBoundaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/convex': {
@@ -107,6 +135,7 @@ const rootRouteChildren: RootRouteChildren = {
   MembersRoute: MembersRoute,
   DemoAuthRoute: DemoAuthRoute,
   DemoConvexRoute: DemoConvexRoute,
+  DemoErrorBoundaryRoute: DemoErrorBoundaryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

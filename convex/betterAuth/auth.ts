@@ -1,6 +1,6 @@
+import { v } from 'convex/values'
 import { createAuth } from '../auth'
 import { query } from './_generated/server'
-import { v } from 'convex/values'
 
 // Export a static instance for Better Auth schema generation
 // @ts-expect-error: https://labs.convex.dev/better-auth/features/local-install#:~:text=export%20const%20auth%20%3D%20createAuth(%7B%7D%20as%20any)
@@ -37,10 +37,11 @@ export const getMember = query({
       role: member.role,
     }
   },
-  returns: v.nullable(v.object({
-    email: v.string(),
-    phoneNumber: v.union(v.string(), v.null()),
-    role: v.string(),
-  })),
+  returns: v.nullable(
+    v.object({
+      email: v.string(),
+      phoneNumber: v.union(v.string(), v.null()),
+      role: v.string(),
+    }),
+  ),
 })
-

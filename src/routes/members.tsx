@@ -2,20 +2,21 @@ import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { usePaginatedQuery } from 'convex/react'
 import { useDebounce } from 'use-debounce'
-import { api } from '../../convex/_generated/api'
 import {
-  Search,
-  UserPlus,
-  Users,
-  Phone,
-  Mail,
   Award,
-  ChevronRight,
   Calendar,
+  ChevronRight,
+  Mail,
   MoreVertical,
   Pencil,
+  Phone,
+  Search,
   Trash2,
+  UserPlus,
+  Users,
 } from 'lucide-react'
+import z from 'zod'
+import { api } from '../../convex/_generated/api'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -49,7 +50,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import z from 'zod'
 import { MemberMilestonesModal } from '@/features/members/components/member-milestones-modal'
 import { cn } from '@/lib/utils'
 import { formatDate, formatFullDate } from '@/lib/formatters'

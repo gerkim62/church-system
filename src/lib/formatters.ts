@@ -2,7 +2,7 @@ export function formatDate(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString(undefined, {
     month: 'short',
     year: 'numeric',
-  });
+  })
 }
 
 export function formatFullDate(timestamp: number): string {
@@ -10,5 +10,5 @@ export function formatFullDate(timestamp: number): string {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
-  });
+  })
 }

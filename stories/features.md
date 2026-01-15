@@ -1,10 +1,10 @@
-all members list 
+all members list
 visitors
 groups. leaders[] for a group
 
 member milestone[] eg babtism
 
-leader: title, 
+leader: title,
 
 group giving.
 contribution list.
@@ -20,4 +20,3 @@ communication: sms to groups, or all.
 prayer requests: specify visibility to who
 
 AI: ask question on everything
-

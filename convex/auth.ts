@@ -1,13 +1,15 @@
-import { createClient, type GenericCtx } from '@convex-dev/better-auth'
+import {  createClient } from '@convex-dev/better-auth'
 import { convex, crossDomain } from '@convex-dev/better-auth/plugins'
+import {  betterAuth } from 'better-auth/minimal'
+import { organization, phoneNumber } from 'better-auth/plugins'
 import { components } from './_generated/api'
-import { DataModel } from './_generated/dataModel'
 import { query } from './_generated/server'
-import { betterAuth, type BetterAuthOptions } from 'better-auth/minimal'
 import authConfig from './auth.config'
 import { env } from './env'
 import authSchema from './betterAuth/schema'
-import { organization, phoneNumber } from 'better-auth/plugins'
+import type { DataModel } from './_generated/dataModel'
+import type {BetterAuthOptions} from 'better-auth/minimal';
+import type {GenericCtx} from '@convex-dev/better-auth';
 
 const siteUrl = env.SITE_URL
 

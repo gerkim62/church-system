@@ -4,20 +4,25 @@ import {
   Loader2Icon,
   OctagonXIcon,
   TriangleAlertIcon,
-} from "lucide-react"
-import { useTheme } from "next-themes"
-import { Toaster as Sonner, type ToasterProps } from "sonner"
+} from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { Toaster as Sonner  } from 'sonner'
+import type {ToasterProps} from 'sonner';
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = "system" } = useTheme()
-  const VALID_THEMES = ["system", "light", "dark"] as const
+  const { theme = 'system' } = useTheme()
+  const VALID_THEMES = ['system', 'light', 'dark'] as const
 
-  function isValidTheme(theme: string | undefined): theme is ToasterProps["theme"] {
+  function isValidTheme(
+    theme: string | undefined,
+  ): theme is ToasterProps['theme'] {
     if (!theme) return false
     return VALID_THEMES.includes(theme)
   }
 
-  const typedTheme:ToasterProps["theme"] = isValidTheme(theme) ? theme : "system"
+  const typedTheme: ToasterProps['theme'] = isValidTheme(theme)
+    ? theme
+    : 'system'
 
   return (
     <Sonner
@@ -32,10 +37,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          '--normal-bg': 'var(--popover)',
+          '--normal-text': 'var(--popover-foreground)',
+          '--normal-border': 'var(--border)',
+          '--border-radius': 'var(--radius)',
         } as React.CSSProperties
       }
       {...props}

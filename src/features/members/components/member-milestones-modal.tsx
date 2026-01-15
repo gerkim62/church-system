@@ -14,30 +14,30 @@ import { useIsMobile } from '@/hooks/use-mobile'
 interface MemberMilestonesModalProps {
   memberId: string
   memberName: string
-    children: React.ReactNode,
+  children: React.ReactNode
 
-    hideOnMobile?: boolean
-    hideOnDesktop?: boolean
+  hideOnMobile?: boolean
+  hideOnDesktop?: boolean
 }
 
 export function MemberMilestonesModal({
   memberId,
   memberName,
   children,
-    hideOnMobile,
-    hideOnDesktop,
+  hideOnMobile,
+  hideOnDesktop,
 }: MemberMilestonesModalProps) {
   const { isOpen, setIsOpen } = useModalState({
-      paramName: 'milestones-modal',
+    paramName: 'milestones-modal',
     openValue: memberId,
-      from: "/members",
+    from: '/members',
   })
 
-    const isMobile = useIsMobile()
+  const isMobile = useIsMobile()
 
-    if ((hideOnMobile && isMobile) || (hideOnDesktop && !isMobile)) {
-        return null;
-    }
+  if ((hideOnMobile && isMobile) || (hideOnDesktop && !isMobile)) {
+    return null
+  }
 
   return (
     <Credenza open={isOpen} onOpenChange={setIsOpen}>

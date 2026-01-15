@@ -1,9 +1,9 @@
-import { env } from '@/env';
-import { authClient } from "@/lib/auth-client";
-import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
-import { ConvexReactClient } from "convex/react";
+import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react'
+import { ConvexReactClient } from 'convex/react'
+import { env } from '@/env'
+import { authClient } from '@/lib/auth-client'
 
-const convexClient = new ConvexReactClient(env.VITE_CONVEX_URL);
+const convexClient = new ConvexReactClient(env.VITE_CONVEX_URL)
 
 export default function AppConvexProvider({
   children,
@@ -16,9 +16,3 @@ export default function AppConvexProvider({
     </ConvexBetterAuthProvider>
   )
 }
-
-
-
-
-
-

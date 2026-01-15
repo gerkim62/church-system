@@ -1,145 +1,144 @@
-import { APIError } from "better-auth";
-import { Statements } from "better-auth/plugins";
-import { authComponent, createAuth } from "../auth";
-import { forbidden, redirect, unauthorized } from "./errors-helpers";
-
+import { APIError } from 'better-auth'
+import { forbidden, redirect, unauthorized } from './errors-helpers'
+import type { Statements } from 'better-auth/plugins'
+import type { authComponent, createAuth } from '../auth'
 
 // New type for auth context - must specify the generic to get correct return type
-type AuthContext = Awaited<ReturnType<typeof authComponent.getAuth<typeof createAuth>>>;
+type AuthContext = Awaited<
+  ReturnType<typeof authComponent.getAuth<typeof createAuth>>
+>
 
 export type StatementsInput = Partial<{
-  [K in keyof Statements]: readonly Statements[K][number][];
-}>;
-
+  [K in keyof Statements]: ReadonlyArray<Statements[K][number]>
+}>
 
 export async function assertAuthenticated(authCtx: AuthContext) {
-  const session = await getServerSession(authCtx);
+  const session = await getServerSession(authCtx)
 
   if (!session) {
-    throw unauthorized();
+    throw unauthorized()
   }
 
-  return session;
+  return session
 }
 
 export async function assertActiveOrganization(authCtx: AuthContext) {
-  await assertAuthenticated(authCtx); // First: ensure authenticated
-  const org = await getActiveMember(authCtx); // Then: get active member
+  await assertAuthenticated(authCtx) // First: ensure authenticated
+  const org = await getActiveMember(authCtx) // Then: get active member
 
-  return org ?? handleNoActiveOrg(authCtx);
+  return org ?? handleNoActiveOrg(authCtx)
 }
 
 export async function assertPermitted({
   authCtx,
   statements,
 }: {
-  authCtx: AuthContext;
-  statements: StatementsInput;
+  authCtx: AuthContext
+  statements: StatementsInput
 }) {
   // IMPORTANT: Assert active organization FIRST, before checking permissions
   // getHasPermission requires an active organization to be set
-  const activeMember = await assertActiveOrganization(authCtx);
+  const activeMember = await assertActiveOrganization(authCtx)
 
   const hasPermission = await getHasPermission({
     authCtx,
     statements: statements,
-  });
+  })
 
   if (!hasPermission) {
-    throw forbidden();
+    throw forbidden()
   }
 
-  return activeMember;
+  return activeMember
 }
 
 export const getServerSession = async (authCtx: AuthContext) => {
   try {
-    const { auth, headers } = authCtx;
+    const { auth, headers } = authCtx
 
     const result = await auth.api.getSession({
       headers,
-    });
-    return result;
+    })
+    return result
   } catch (error) {
-    console.error("Error getting server session:", error);
-    throw error;
+    console.error('Error getting server session:', error)
+    throw error
   }
-};
+}
 
 export const getHasPermission = async ({
   authCtx,
   statements,
 }: {
-  authCtx: AuthContext;
-  statements: StatementsInput;
+  authCtx: AuthContext
+  statements: StatementsInput
 }) => {
-  const { auth, headers } = authCtx;
+  const { auth, headers } = authCtx
   const hasPermission = await auth.api.hasPermission({
     headers,
     body: {
       permissions: statements,
     },
-  });
+  })
 
-  return hasPermission.success;
-};
+  return hasPermission.success
+}
 
 export const getActiveMember = async (authCtx: AuthContext) => {
   try {
-    const { auth, headers } = authCtx;
+    const { auth, headers } = authCtx
     const activeMember = await auth.api.getActiveMember({
       headers,
-    });
-    return activeMember;
+    })
+    return activeMember
   } catch (error) {
     if (error instanceof APIError) {
-      return null;
+      return null
     }
-    throw error;
+    throw error
   }
-};
+}
 
 // Fetch organizations server-side
 export const getOrganizations = async (authCtx: AuthContext) => {
-  const { auth, headers } = authCtx;
-  const result = await auth.api.listOrganizations({ headers });
-  return result ?? [];
-};
+  const { auth, headers } = authCtx
+  const result = await auth.api.listOrganizations({ headers })
+  return result ?? []
+}
 
 export async function handleNoActiveOrg(authCtx: AuthContext) {
-  const { auth, headers } = authCtx;
-  const orgs = await getOrganizations(authCtx);
+  const { auth, headers } = authCtx
+  const orgs = await getOrganizations(authCtx)
 
-
-  console.log("handleNoActiveOrg found orgs:", orgs);
+  console.log('handleNoActiveOrg found orgs:', orgs)
 
   // No organizations - redirect to create one
   if (orgs.length === 0) {
-    console.log("No organizations found, redirecting to new hire shop modal");
-    redirect(`/ob/create-organization`);
+    console.log('No organizations found, redirecting to new hire shop modal')
+    redirect(`/ob/create-organization`)
   }
 
   // Single organization - automatically set it as active and refetch
   if (orgs.length === 1) {
-    console.log("Single organization found, setting it as active");
+    console.log('Single organization found, setting it as active')
     await auth.api.setActiveOrganization({
       body: { organizationId: orgs[0]?.id },
       headers,
-    });
+    })
 
-    const activeMember = await getActiveMember(authCtx);
+    const activeMember = await getActiveMember(authCtx)
 
     if (activeMember) {
-      return activeMember;
+      return activeMember
     }
 
     console.error(
-      "Failed to set active organization. Redirecting to select organization"
-    );
+      'Failed to set active organization. Redirecting to select organization',
+    )
   }
 
   // Multiple organizations - let user choose
-  redirect(`/ob/select-organization`);
+  redirect(`/ob/select-organization`)
 }
 
 // USAGE EXAMPLE:

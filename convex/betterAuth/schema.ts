@@ -1,10 +1,10 @@
-import { defineSchema } from "convex/server";
-import { tables } from "./generatedSchema";
+import { defineSchema } from 'convex/server'
+import { tables } from './generatedSchema'
 
 const schema = defineSchema({
   ...tables,
   // Spread the generated schema and add a custom index
-  user: tables.user
-});
+  user: tables.user,
+})
 
-export default schema;
+export default schema
